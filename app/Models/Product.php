@@ -12,17 +12,16 @@ class Product extends Model
 
     static function notInCart(Request $request)
     {
-        return collect(static::all())
-            ->reject(function ($product) use ($request) {
-                return in_array($product->id, $request->session()->get('productsInCart'));
-            });
+        $productsInCart = $request->session()->get('productsInCart', []);
+        
+        return static::whereNotIn('id', $productsInCart)->get();
     }
-
+    
     protected $fillable = [
         'id',
         'title',
         'description',
         'price',
-        'image',
+        'image_path',
     ];
 }

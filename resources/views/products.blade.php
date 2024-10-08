@@ -1,37 +1,39 @@
-<?php
-$productsInCart = Session::get('productsInCart');
-print_r($productsInCart);
-?>
+<x-layout>
+    @if (session('success'))
+        {{ session('success') }}
+    @endif
 
-<x-layout> 
-    <h1>What you can buy:</h1>
-    
-    <table border="1" cellpadding="10">
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Image</th>
-            <th>Add to cart</th>
-        </tr>
-        @if(isset($products))
+    @if ($products && count($products) > 0)
+
+        <h2>What you can buy:</h2>
+        <table border="1" cellpadding="10">
+            <tr>
+                <x-display-product-details> </x-display-product-details>
+                <th>Add to cart</th>
+            </tr>
+
             @foreach ($products as $product)
                 <tr>
-                    <td>{{ $product->title }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->description }}</td>
-                    <td><img src="{{ asset("images/$product->image") }}"></td>
+                    <x-display-product :product="$product" />
                     <td>
-                        <form action="/" method="post">
+                        <form action="{{ route('products.store') }}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{ $product->id }}">
                             <input type="submit" value="Add to cart"></input>
                         </form>
                     </td>
-                <tr>
+                </tr>
             @endforeach
-        @endif
-    </table>
+        </table>
 
+    @else
+        <h2>You bought everything.</h2>
+    @endif
+
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    @endif
 
 </x-layout>
