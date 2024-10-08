@@ -8,3 +8,5 @@ Route::resource('products', ProductController::class)->except(['index']);
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
 Route::post('/cart/clear', [ProductController::class, 'clearCart'])->name('cart.clear');
+
+Route::post('/checkout', [ProductController::class, 'processCheckout'])->name('checkout.process');

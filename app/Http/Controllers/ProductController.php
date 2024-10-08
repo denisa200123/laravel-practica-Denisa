@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductIdRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmation;
 use Session;
 
 class ProductController extends Controller
@@ -55,7 +57,25 @@ class ProductController extends Controller
     
         return redirect()->route('cart')->with('success', 'Product removed');
     }
-    
+
+    //send mail
+    public function processCheckout(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'details' => 'required|string',
+            'comments' => 'required|string',
+        ]);
+
+        $productsInCart = $request->session()->get('productsInCart', []);
+        $products = Product::whereIn('id', $productsInCart)->get();
+
+        $response = Mail::to("denisa.olaru179@gmail.com")->send(new OrderConfirmation($products, $request->all()));
+        dd($response);
+        $request->session()->forget('productsInCart');
+
+        return redirect()->route('products.index')->with('OrderSuccess', 'Order placed successfully and details have been sent to your email!');
+    }
 
     private function initializeCart(Request $request) {
         if (!$request->session()->has('productsInCart')) {

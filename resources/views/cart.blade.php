@@ -25,6 +25,22 @@
                 </tr>
             @endforeach
         </table>
+
+        <h2>Checkout</h2>
+        <form action="{{ route('checkout.process') }}" method="post">
+            @csrf
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="details">Order details:</label>
+            <input type="details" id="details" name="details" required><br><br>
+
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments"></textarea><br><br>
+
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+
     @else
         <h2>Your cart is empty</h2>
     @endif
