@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductIdRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmation;
-use Session;
 
 class ProductController extends Controller
 {
