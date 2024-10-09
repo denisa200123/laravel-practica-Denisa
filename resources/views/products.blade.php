@@ -1,4 +1,6 @@
 <x-layout>
+    <x-slot name="title"> Products </x-slot>
+
     <x-header />
 
     <x-validation-messages-products-cart />
