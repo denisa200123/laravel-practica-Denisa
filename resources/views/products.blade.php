@@ -2,7 +2,9 @@
     <x-header />
 
     <x-validation-messages-products-cart />
-
+    @if (session('OrderSuccess'))
+        <p class="alert alert-success"> {{ session('OrderSuccess') }} </p>
+    @endif
     @if ($products && count($products) > 0)
 
         <h2>What you can buy:</h2>

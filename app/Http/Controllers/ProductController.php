@@ -70,11 +70,10 @@ class ProductController extends Controller
         $productsInCart = $request->session()->get('productsInCart', []);
         $products = Product::whereIn('id', $productsInCart)->get();
 
-        $response = Mail::to("denisa.olaru179@gmail.com")->send(new OrderConfirmation($products, $request->all()));
-        dd($response);
+        Mail::to("denisa.olaru179@gmail.com")->send(new OrderConfirmation($products, $request->all()));
         $request->session()->forget('productsInCart');
 
-        return redirect()->route('products.index')->with('OrderSuccess', 'Order placed successfully and details have been sent to your email!');
+        return redirect()->route('products.index')->with('OrderSuccess', 'Order placed successfully!');
     }
 
     private function initializeCart(Request $request) {
