@@ -30,13 +30,15 @@
         <form action="{{ route('checkout.process') }}" method="post">
             @csrf
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
+            <input type="text" id="name" name="name" required value="{{ old('name') }}"><br><br>
 
             <label for="details">Order details:</label>
-            <input type="details" id="details" name="details" required><br><br>
+            <input type="details" id="details" name="details" required value="{{ old('details') }}"><br><br>
 
             <label for="comments">Comments:</label>
-            <textarea id="comments" name="comments"></textarea><br><br>
+            <textarea id="comments" name="comments" required value="{{ old('comments') }}"></textarea>
+            
+            <br><br>
 
             <button type="submit" class="btn btn-primary">Place Order</button>
         </form>
