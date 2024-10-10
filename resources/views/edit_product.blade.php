@@ -19,7 +19,7 @@
                         @csrf
                         @method('PUT')
                         <td> <input type="text" id="name" name="name" value="{{ $product->title }}"> </td>
-                        <td> <input type="number" id="price" name="price" value="{{ $product->price }}"> </td>
+                        <td> <input type="number" name="price" id="price" step="0.1" min="0" value="{{ $product->price }}"> </td>
                         <td> <input type="text" id="description" name="description" value="{{ $product->description }}"> </td>
                         <td> <input type="file" name="image" id="image"> </td>
 

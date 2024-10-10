@@ -50,7 +50,7 @@ class AdminController extends Controller
             $product->update($request->all());
             return redirect()->route('edit.page')->with('success', 'Product updated');
         } catch (\Exception $e) {
-            return back()->withErrors('Product couldnt be edited');
+            return redirect()->route('edit.page')->withErrors('Product couldnt be edited');
         }
     }
 
