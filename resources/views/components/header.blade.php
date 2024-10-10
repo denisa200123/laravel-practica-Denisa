@@ -8,7 +8,7 @@
     @if(session("is_admin"))
         <div style="width: fit-content; height:  fit-content;">
             <a href="{{ route('edit.page') }}" class="btn btn-dark">Edit products</a>
-            <a href="{{ route('add.product') }}" class="btn btn-dark">Add products</a>
+            <a href="{{ route('add.page') }}" class="btn btn-dark">Add products</a>
         </div>
         <a href="{{ route('logout') }}" class="btn btn-dark" style="margin-right: 10px;">Logout</a>
     @else

@@ -30,7 +30,7 @@ class AdminController extends Controller
               'title' => 'string|max:255',
               'price' => 'numeric|min:0',
               'description' => 'string',
-              'image'=> 'image|mimes:png, jpeg, gif, webp, svg, jpg',
+              'image'=> 'image',
             ]);
       
             $product = Product::findOrFail($id);
@@ -63,5 +63,33 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors('Product couldnt be removed');
         }
+    }
+
+    public function addProductPage(Request $request){
+        return view('add_product');
+    }
+
+    public function addProduct(Request $request){
+        try {
+            $request->validate([
+              'title' => 'required|string|max:255',
+              'price' => 'required|numeric|min:0',
+              'description' => 'required|string',
+              'image'=> 'required|image',
+            ]);
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('images/', $filename);
+
+            $info = ['title' => $request->title, 'price' => $request->price, 'description' => $request->description, 'image_path' =>$filename];
+
+            Product::create($info);
+            return redirect()->route('edit.page')->with('success', 'Product created');
+        } catch (\Exception $e) {
+            return back()->withErrors('Product couldnt be created');
+        }
+        
     }
 }

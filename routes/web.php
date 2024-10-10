@@ -23,4 +23,5 @@ Route::put('/edit/product/{id}', [AdminController::class, 'editProduct'])->name(
 
 Route::delete('/delete/{id}', [AdminController::class, 'deleteProduct'])->name('delete.product');
 
-Route::get('/add', [AdminController::class, 'addProduct'])->name('add.product');
+Route::get('/add/page', [AdminController::class, 'addProductPage'])->name('add.page');
+Route::post('/add/product', [AdminController::class, 'addProduct'])->name('add.product');

@@ -25,7 +25,7 @@ class OrderConfirmation extends Mailable
     public function build()
     {
         return $this->subject('Order Confirmation')
-                    ->view('order-confirmation')
+                    ->view('components/order-confirmation')
                     ->with([
                         'products' => $this->products,
                         'customerDetails' => $this->customerDetails,
