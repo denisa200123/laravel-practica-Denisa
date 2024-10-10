@@ -8,7 +8,7 @@
     @if ($products && count($products) > 0)
     <div style="display: flex; padding: 40px 60px; gap: 100px;">
         <div style="margin-left: 50px; width: fit-content; height:  fit-content;">
-            <h2> {{ __('labels.cart') }} </h2>
+            <h2> Your cart </h2>
             <table border="1" cellpadding="10">
                 <tr>
                     <x-display-product-details> </x-display-product-details>
