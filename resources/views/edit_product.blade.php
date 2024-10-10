@@ -4,6 +4,10 @@
 
     <x-header />
 
+    @if (session('DeleteSuccess'))
+        <p class="alert alert-success"> {{ session('DeleteSuccess') }} </p>
+    @endif
+
     @if ($products && count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">
             <h2>All the products:</h2>
@@ -17,19 +21,13 @@
                 @foreach ($products as $product)
                     <tr>
                         <x-display-product :product="$product" />
-
                         <td>
-                            <form action="{{ route('edit') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $product->id }}">
-                                <input type="submit" value="Edit" class="btn btn-warning"></input>
-                            </form>
+                            Edit
                         </td>
-
                         <td>
-                            <form action="{{ route('delete') }}" method="remove">
+                            <form action="{{ route('delete', $product->id) }}" method="post">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $product->id }}">
+                                @method('DELETE')
                                 <input type="submit" value="Delete" class="btn btn-danger"></input>
                             </form>
                         </td>

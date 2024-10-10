@@ -20,6 +20,6 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/edit', [AdminController::class, 'editProduct'])->name('edit.product');
 //Route::post('/edit', [AdminController::class, 'edit'])->name('edit');
 
-//Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
+Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
 
 Route::get('/add', [AdminController::class, 'addProduct'])->name('add.product');

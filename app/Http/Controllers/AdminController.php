@@ -12,10 +12,11 @@ class AdminController extends Controller
         $products =  Product::all();
         return view('edit_product',['products'=>$products]);
     }
-/*
-    public function remove(ProductIdRequest $request){
-        $productId = $request->id;
 
-        return view('edit_product',['products'=>$products]);
-    }*/
+    public function delete($id){
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->route('edit.product')->with('DeleteSuccess', 'Product removed');
+    }
 }
