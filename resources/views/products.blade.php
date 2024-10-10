@@ -3,15 +3,7 @@
 
     <x-header />
     
-    <x-validation-messages-products-cart />
-
-    @if (session('OrderSuccess'))
-        <p class="alert alert-success"> {{ session('OrderSuccess') }} </p>
-    @endif
-
-    @if (session('LoginSuccess'))
-        <p class="alert alert-success"> {{ session('LoginSuccess') }} </p>
-    @endif
+    <x-validation-messages />
 
     @if ($products && count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">

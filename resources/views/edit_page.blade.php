@@ -4,21 +4,7 @@
 
     <x-header />
 
-    @if (session('DeleteSuccess'))
-        <p class="alert alert-success"> {{ session('DeleteSuccess') }} </p>
-    @endif
-
-    @if (session('DeleteFail'))
-        <p class="alert alert-danger"> {{ session('DeleteFail') }} </p>
-    @endif
-
-    @if (session('EditSuccess'))
-        <p class="alert alert-success"> {{ session('EditSuccess') }} </p>
-    @endif
-
-    @if (session('EditProductFail'))
-        <p class="alert alert-danger"> {{ session('EditProductFail') }} </p>
-    @endif
+    <x-validation-messages />
 
     @if ($products && count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">

@@ -19,7 +19,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/edit/page', [AdminController::class, 'editPage'])->name('edit.page');
 Route::post('/edit/product/{id}/page', [AdminController::class, 'editProductPage'])->name('edit.product.page');
-Route::post('/edit/product/{id}', [AdminController::class, 'editProduct'])->name('edit.product');
+Route::put('/edit/product/{id}', [AdminController::class, 'editProduct'])->name('edit.product');
 
 Route::delete('/delete/{id}', [AdminController::class, 'deleteProduct'])->name('delete.product');
 

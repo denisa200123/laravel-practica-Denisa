@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use File;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdminController extends Controller
 {
@@ -18,8 +18,8 @@ class AdminController extends Controller
             $product = Product::findOrFail($id);
 
             return view('edit_product',['product'=>$product]);
-        } catch (ModelNotFoundException $e) {
-            return redirect()->route('edit.page')->with('EditFail', 'Did not find product');
+        } catch (\Exception $e) {
+            return back()->withErrors('Did not find product');
         }
     }
 
@@ -27,16 +27,30 @@ class AdminController extends Controller
     {
         try {
             $request->validate([
-              'title' => 'max:255',
-              'price' => '',
-              'description' => '',
+              'title' => 'string|max:255',
+              'price' => 'numeric|min:0',
+              'description' => 'string',
+              'image'=> 'image|mimes:png, jpeg, gif, webp, svg, jpg',
             ]);
       
             $product = Product::findOrFail($id);
+
+            if ($request->hasFile('image')) {
+                $destination = 'images/' . $product->image_path;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() .'.'. $extension;
+                $file->move('images/', $filename);
+                $product->image_path = $filename;
+            }
+
             $product->update($request->all());
-            return redirect()->route('edit.page')->with('EditSuccess', 'Product updated');
-        } catch (ModelNotFoundException $e) {
-            return redirect()->route('edit.page')->with('EditProductFail', 'Product couldnt be edited');
+            return redirect()->route('edit.page')->with('success', 'Product updated');
+        } catch (\Exception $e) {
+            return back()->withErrors('Product couldnt be edited');
         }
     }
 
@@ -45,9 +59,9 @@ class AdminController extends Controller
             $product = Product::findOrFail($id);
             $product->delete();
     
-            return redirect()->route('edit.page')->with('DeleteSuccess', 'Product removed');
-        } catch (ModelNotFoundException $e) {
-            return redirect()->route('edit.page')->with('DeleteFail', 'Product couldnt be removed');
+            return redirect()->route('edit.page')->with('success', 'Product removed');
+        } catch (\Exception $e) {
+            return back()->withErrors('Product couldnt be removed');
         }
     }
 }

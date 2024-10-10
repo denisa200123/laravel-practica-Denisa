@@ -3,7 +3,7 @@
 
     <x-header />
 
-    <x-validation-messages-products-cart />
+    <x-validation-messages />
 
     @if ($products && count($products) > 0)
     <div style="display: flex; padding: 40px 60px; gap: 100px;">

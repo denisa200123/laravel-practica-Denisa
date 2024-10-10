@@ -72,7 +72,7 @@ class ProductController extends Controller
         Mail::to("denisa.olaru179@gmail.com")->send(new OrderConfirmation($products, $request->all()));
         $request->session()->forget('productsInCart');
 
-        return redirect()->route('products.index')->with('OrderSuccess', 'Order placed successfully!');
+        return redirect()->route('products.index')->with('success', 'Order placed successfully!');
     }
 
     private function initializeCart(Request $request) {

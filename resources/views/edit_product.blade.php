@@ -4,6 +4,8 @@
 
     <x-header />
 
+    <x-validation-messages />
+
     @if ($product)
 
         <div style="margin-left: 10px; margin-bottom: 10px;">
@@ -13,13 +15,13 @@
                     <th>Edit</th>
                 </tr>
                 <tr>
-                    <form action="{{ route('edit.product', $product->id) }}" method='post'>
+                    <form action="{{ route('edit.product', $product->id) }}" method='post' enctype="multipart/form-data">
                         @csrf
-
+                        @method('PUT')
                         <td> <input type="text" id="name" name="name" value="{{ $product->title }}"> </td>
                         <td> <input type="number" id="price" name="price" value="{{ $product->price }}"> </td>
                         <td> <input type="text" id="description" name="description" value="{{ $product->description }}"> </td>
-                        <td><img src="{{ asset('images/' . $product->image_path) }}" alt="{{ $product->title }}" /></td>
+                        <td> <input type="file" name="image" id="image"> </td>
 
                         <td><input type="submit" value="Edit" class="btn btn-warning"></td>
                     </form>
