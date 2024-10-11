@@ -4,6 +4,8 @@
     <x-header />
     
     <x-validation-messages />
+    
+    <?php app()->setLocale("eng");?>
 
     @if ($products && count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">

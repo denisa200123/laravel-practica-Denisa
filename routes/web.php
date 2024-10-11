@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LanguageController;
 
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
 Route::resource('products', ProductController::class)->except(['index']);
@@ -26,3 +27,4 @@ Route::delete('/delete/{id}', [AdminController::class, 'deleteProduct'])->name('
 Route::get('/add/page', [AdminController::class, 'addProductPage'])->name('add.page');
 Route::post('/add/product', [AdminController::class, 'addProduct'])->name('add.product');
 
+Route::post('/set-language', [LanguageController::class, 'setLanguage'])->name('set.language');
