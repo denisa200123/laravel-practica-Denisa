@@ -19,7 +19,7 @@ class AdminController extends Controller
 
             return view('edit_product',['product'=>$product]);
         } catch (\Exception $e) {
-            return back()->withErrors('Did not find product');
+            return back()->withErrors(__('Did not find product'));
         }
     }
 
@@ -48,9 +48,9 @@ class AdminController extends Controller
             }
 
             $product->update($request->all());
-            return redirect()->route('edit.page')->with('success', 'Product updated');
+            return redirect()->route('edit.page')->with('success', __('Product updated'));
         } catch (\Exception $e) {
-            return redirect()->route('edit.page')->withErrors('Product couldnt be edited');
+            return redirect()->route('edit.page')->withErrors(__('Product couldnt be edited'));
         }
     }
 
@@ -59,9 +59,9 @@ class AdminController extends Controller
             $product = Product::findOrFail($id);
             $product->delete();
     
-            return redirect()->route('edit.page')->with('success', 'Product removed');
+            return redirect()->route('edit.page')->with('success', __('Product removed'));
         } catch (\Exception $e) {
-            return back()->withErrors('Product couldnt be removed');
+            return back()->withErrors(__('Product couldnt be removed'));
         }
     }
 
@@ -86,9 +86,9 @@ class AdminController extends Controller
             $info = ['title' => $request->title, 'price' => $request->price, 'description' => $request->description, 'image_path' =>$filename];
 
             Product::create($info);
-            return redirect()->route('edit.page')->with('success', 'Product created');
+            return redirect()->route('edit.page')->with('success', __('Product created'));
         } catch (\Exception $e) {
-            return back()->withErrors('Product couldnt be created');
+            return back()->withErrors(__('Product couldnt be created'));
         }
         
     }

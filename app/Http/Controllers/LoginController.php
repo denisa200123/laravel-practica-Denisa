@@ -21,10 +21,10 @@ class LoginController extends Controller
 
         if($request->username === env('ADMIN_USERNAME') && $request->password === env('ADMIN_PASSWORD')) {
             $request->session()->put('is_admin', true);
-            return redirect()->route('products.index')->with('LoginSuccess', 'Login successfull!');
+            return redirect()->route('products.index')->with('success', __('Login successfull!'));
         }
 
-        return back()->withErrors('Invalid credentials!');
+        return back()->withErrors(__('Invalid credentials!'));
     }
 
     public function logout(Request $request) {

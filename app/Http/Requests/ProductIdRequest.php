@@ -26,8 +26,8 @@ class ProductIdRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'The product id is required.',
-            'id.exists' => 'The selected product does not exist.',
+            'id.required' => __('The product id is required'),
+            'id.exists' => __('The selected product does not exist'),
         ];
     }
 }

@@ -30,7 +30,7 @@ class ProductController extends Controller
             $request->session()->put('productsInCart', $productsInCart->all());
         }
 
-        return redirect()->route('products.index')->with('success', 'Product added to cart');
+        return redirect()->route('products.index')->with('success', __('Product added to cart'));
     }
 
     //see products in cart
@@ -54,7 +54,7 @@ class ProductController extends Controller
     
         $request->session()->put('productsInCart', $productsInCart);
     
-        return redirect()->route('cart')->with('success', 'Product removed');
+        return redirect()->route('cart')->with('success', __('Product removed'));
     }
 
     //send mail
@@ -72,7 +72,7 @@ class ProductController extends Controller
         Mail::to("denisa.olaru179@gmail.com")->send(new OrderConfirmation($products, $request->all()));
         $request->session()->forget('productsInCart');
 
-        return redirect()->route('products.index')->with('success', 'Order placed successfully!');
+        return redirect()->route('products.index')->with('success',  __('Order placed successfully'));
     }
 
     private function initializeCart(Request $request) {

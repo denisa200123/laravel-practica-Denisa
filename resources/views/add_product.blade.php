@@ -1,17 +1,17 @@
 <x-layout>
 
-    <x-slot name="title"> Add product</x-slot>
+    <x-slot name="title"> {{ __('Add product') }}</x-slot>
 
     <x-header />
 
     <x-validation-messages />
 
     <div style="margin-left: 10px; margin-bottom: 10px;">
-        <h2>Create product</h2>
+        <h2>{{ __('Create product') }}</h2>
         <table border="1" cellpadding="10">
             <tr>
                 <x-display-product-details> </x-display-product-details>
-                <th>Add</th>
+                <th>{{ __('Create product') }}</th>
             </tr>
             <tr>
                 <form action="{{ route('add.product') }}" method='post' enctype="multipart/form-data">
@@ -22,7 +22,7 @@
                     <td> <input type="text" id="description" name="description"></td>
                     <td> <input type="file" name="image" id="image"> </td>
 
-                    <td><input type="submit" value="Add" class="btn btn-primary"></td>
+                    <td><input type="submit" value="{{ __('Create') }}" class="btn btn-primary"></td>
                 </form>
             </tr>
         </table>

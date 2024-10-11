@@ -1,6 +1,6 @@
 <x-layout>
 
-    <x-slot name="title"> Edit product</x-slot>
+    <x-slot name="title"> {{ __('Edit product') }}</x-slot>
 
     <x-header />
 
@@ -12,7 +12,7 @@
             <table border="1" cellpadding="10">
                 <tr>
                     <x-display-product-details> </x-display-product-details>
-                    <th>Edit</th>
+                    <th>{{ __('Edit') }}</th>
                 </tr>
                 <tr>
                     <form action="{{ route('edit.product', $product->id) }}" method='post' enctype="multipart/form-data">
@@ -23,14 +23,14 @@
                         <td> <input type="text" id="description" name="description" value="{{ $product->description }}"> </td>
                         <td> <input type="file" name="image" id="image"> </td>
 
-                        <td><input type="submit" value="Edit" class="btn btn-warning"></td>
+                        <td><input type="submit" value="{{ __('Edit') }}" class="btn btn-warning"></td>
                     </form>
                 </tr>
             </table>
         </div>
 
     @else
-        <h3>No product to edit</h3>
+        <h3>{{ __('No products to edit') }}</h3>
     @endif
 
 </x-layout>

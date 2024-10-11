@@ -1,4 +1,4 @@
-<th>Name</th>
-<th>Price</th>
-<th>Description</th>
-<th>Image</th>
+<th>{{ __('Name') }}</th>
+<th>{{ __('Price') }}</th>
+<th>{{ __('Description') }}</th>
+<th>{{ __('Image') }}</th>

@@ -25,3 +25,4 @@ Route::delete('/delete/{id}', [AdminController::class, 'deleteProduct'])->name('
 
 Route::get('/add/page', [AdminController::class, 'addProductPage'])->name('add.page');
 Route::post('/add/product', [AdminController::class, 'addProduct'])->name('add.product');
+
