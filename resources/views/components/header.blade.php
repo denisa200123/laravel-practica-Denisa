@@ -5,7 +5,7 @@
         <a href="{{ route('cart') }}" class="btn btn-dark">{{ __('Your cart') }}</a>
         <form id="langform" action="{{ route('set.language') }}" method="post" style="width: fit-content; height:  fit-content; margin-top:10px;">
             @csrf
-            <select class="form-select" name="lang" id="lang" onchange="this.form.submit()">
+            <select name="lang" id="lang" onchange="this.form.submit()">
                 <option value="en" @if (session('locale', 'en') == 'en') selected @endif> English</option>
                 <option value="ro" @if (session('locale') == 'ro') selected @endif> Romanian</option>
             </select>

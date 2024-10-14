@@ -15,12 +15,22 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session("is_admin")) {
-            if ($request->route()->named('login.show')) {
-                return redirect('/');
-            }
+        //admin can't access login
+        if(session("is_admin") && $request->route()->named('login.show')) {
+            return redirect('/');
+        }
+
+        //login form can be accessed only if admin is not already logged in
+        if(!session("is_admin") && $request->route()->named('login.show')) {
             return $next($request);
         }
+
+        //only admin can access admin restricted pages
+        if(session("is_admin")) {
+            return $next($request);
+        }
+
+        //if the user is not logged in => redirect to main page
         return redirect('/');
     }
 }

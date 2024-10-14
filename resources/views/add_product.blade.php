@@ -18,7 +18,7 @@
                     @csrf
                     
                     <td> <input type="text" id="title" name="title"> </td>
-                    <td> <input type="number" name="price" id="price" step="0.1" min="0"> </td>
+                    <td> <input type="number" name="price" id="price" step="0.01" min="0"> </td>
                     <td> <input type="text" id="description" name="description"></td>
                     <td> <input type="file" name="image" id="image"> </td>
 
