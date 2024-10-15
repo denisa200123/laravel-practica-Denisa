@@ -15,7 +15,7 @@
                     <th>{{ __('Edit') }}</th>
                 </tr>
                 <tr>
-                    <form action="{{ route('edit.product', $product->id) }}" method='post' enctype="multipart/form-data">
+                    <form action="{{ route('edit.product', $product->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <td> <input type="text" id="title" name="title" value="{{ $product->title }}"> </td>

@@ -14,7 +14,7 @@
                 <th>{{ __('Create product') }}</th>
             </tr>
             <tr>
-                <form action="{{ route('add.product') }}" method='post' enctype="multipart/form-data">
+                <form action="{{ route('add.product') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     
                     <td> <input type="text" id="title" name="title"> </td>

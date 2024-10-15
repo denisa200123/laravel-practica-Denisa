@@ -11,7 +11,8 @@ use App\Mail\OrderConfirmation;
 class ProductController extends Controller
 {
     //see products not added to the cart
-    public function index(Request $request) {
+    public function index(Request $request) 
+    {
         $this->initializeCart($request);
         
         $products =  Product::notInCart($request);
@@ -19,7 +20,8 @@ class ProductController extends Controller
     }
 
     //add product to cart
-    public function store(ProductIdRequest  $request) {
+    public function store(ProductIdRequest  $request) 
+    {
         $this->initializeCart($request);
 
         $id = $request->id;
@@ -34,7 +36,8 @@ class ProductController extends Controller
     }
 
     //see products in cart
-    public function cart(Request $request) {
+    public function cart(Request $request) 
+    {
         $this->initializeCart($request);
 
         $productsInCart = $request->session()->get('productsInCart', []);
@@ -44,11 +47,13 @@ class ProductController extends Controller
     }
 
     //remove from cart
-    public function clearCart(ProductIdRequest $request) {
+    public function clearCart(ProductIdRequest $request) 
+    {
         $productId = $request->id;
         $productsInCart = $request->session()->get('productsInCart', []);
     
-        $productsInCart = array_filter($productsInCart, function ($id) use ($productId) {
+        $productsInCart = array_filter($productsInCart, function ($id) use ($productId) 
+        {
             return $id != $productId;
         });
     
@@ -69,13 +74,14 @@ class ProductController extends Controller
         $productsInCart = $request->session()->get('productsInCart', []);
         $products = Product::whereIn('id', $productsInCart)->get();
 
-        Mail::to("denisa.olaru179@gmail.com")->send(new OrderConfirmation($products, $request->all()));
+        Mail::to('denisa.olaru179@gmail.com')->send(new OrderConfirmation($products, $request->all()));
         $request->session()->forget('productsInCart');
 
         return redirect()->route('products.index')->with('success',  __('Order placed successfully'));
     }
 
-    private function initializeCart(Request $request) {
+    private function initializeCart(Request $request) 
+    {
         if (!$request->session()->has('productsInCart')) {
             $request->session()->put('productsInCart', []);
         }

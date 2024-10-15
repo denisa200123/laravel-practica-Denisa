@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    public function showLogin(Request $request) {
+    public function showLogin(Request $request) 
+    {
         return view('login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request) 
+    {
         $request->validate([
             'username' => 'required|string|max:255',
             'password' => 'required|string',
@@ -24,7 +26,8 @@ class LoginController extends Controller
         return back()->withErrors(__('Invalid credentials!'));
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request) 
+    {
         $request->session()->forget('is_admin');
         return redirect()->route('products.index');
     }

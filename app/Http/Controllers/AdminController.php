@@ -8,12 +8,14 @@ use App\Models\Product;
 
 class AdminController extends Controller
 {
-    public function editPage(Request $request){
+    public function editPage(Request $request)
+    {
         $products =  Product::all();
         return view('edit_page',['products'=>$products]);
     }
 
-    public function editProductPage($id){
+    public function editProductPage($id)
+    {
         try {
             $product = Product::findOrFail($id);
 
@@ -54,7 +56,8 @@ class AdminController extends Controller
         }
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
         try {
             $product = Product::findOrFail($id);
             $product->delete();
@@ -65,11 +68,13 @@ class AdminController extends Controller
         }
     }
 
-    public function addProductPage(Request $request){
+    public function addProductPage(Request $request)
+    {
         return view('add_product');
     }
 
-    public function addProduct(Request $request){
+    public function addProduct(Request $request)
+    {
         try {
             $request->validate([
               'title' => 'required|string|max:255',

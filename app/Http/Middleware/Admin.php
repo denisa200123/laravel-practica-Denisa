@@ -13,20 +13,20 @@ class Admin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         //admin can't access login
-        if(session("is_admin") && $request->route()->named('login.show')) {
+        if (session(key: 'is_admin') && $request->route()->named('login.show')) {
             return redirect('/');
         }
 
         //login form can be accessed only if admin is not already logged in
-        if(!session("is_admin") && $request->route()->named('login.show')) {
+        if (!session('is_admin') && $request->route()->named('login.show')) {
             return $next($request);
         }
 
         //only admin can access admin restricted pages
-        if(session("is_admin")) {
+        if (session('is_admin')) {
             return $next($request);
         }
 
