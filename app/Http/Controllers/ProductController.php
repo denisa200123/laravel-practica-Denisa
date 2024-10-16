@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductIdRequest;
 use Illuminate\Support\Facades\Mail;
@@ -73,8 +74,14 @@ class ProductController extends Controller
 
         $productsInCart = $request->session()->get('productsInCart', []);
         $products = Product::whereIn('id', $productsInCart)->get();
+        $totalPrice = $products->sum('price');
 
         Mail::to('denisa.olaru179@gmail.com')->send(new OrderConfirmation($products, $request->all()));
+        
+        $info = ['customer_name' => $request->name, 'contact_details' => $request->details, 'comments' => $request->comments, 'total_price' => $totalPrice];
+
+        Order::create($info);
+        
         $request->session()->forget('productsInCart');
 
         return redirect()->route('products.index')->with('success',  __('Order placed successfully'));

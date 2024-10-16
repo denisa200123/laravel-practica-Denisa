@@ -52,5 +52,15 @@
     "Product couldnt be edited": "Produsul nu a putut fi editat",
     "Product couldnt be removed": "Produsul nu a putut fi sters",
     "Product created": "Produsul a fost creat",
-    "Product couldnt be created": "Produsul nu a putut fi creat"
+    "Product couldnt be created": "Produsul nu a putut fi creat",
+    "No orders to show.": "Nicio comanda existenta",
+    "Total price": "Pret total",
+    "Creation date": "Data crearii",
+    "See details": "Vezi detalii",
+    "See orders": "Vezi comenzi",
+    "Order id": "Id comanda",
+    "Customer name": "Nume client",
+    "Contact details": "Detalii de contact",
+    "Comments": "Comentarii",
+    "Orders": "Comenzi"
 }

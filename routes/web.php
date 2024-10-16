@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
 
 Route::middleware(['setLocale'])->group(function () {
@@ -18,6 +19,8 @@ Route::middleware(['setLocale'])->group(function () {
     Route::get('/login', [LoginController::class, 'showLogin'])->name('login.show')->middleware('admin');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('admin');
+
+    Route::get('/orders', [OrderController::class, 'showOrders'])->name('show.orders')->middleware('admin');
 
     Route::get('/edit/page', [AdminController::class, 'editPage'])->name('edit.page')->middleware('admin');
     Route::post('/edit/product/{id}/page', [AdminController::class, 'editProductPage'])->name('edit.product.page')->middleware('admin');
