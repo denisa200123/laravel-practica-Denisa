@@ -11,6 +11,10 @@
                 width: 150px;
                 height: auto;
             }
+
+            table {
+                width: 1000px
+            }
         </style>
     </head>
 

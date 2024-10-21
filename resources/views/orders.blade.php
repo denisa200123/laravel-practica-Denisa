@@ -18,7 +18,7 @@
                     <tr>
                         <x-display-order :order="$order" />
                         <td>
-                            <form action="{{ route('show.orders') }}" method="post">
+                            <form action="{{ route('orders.index') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $order->id }}">
                                 <input type="submit" value="{{ __('See details') }}" class="btn btn-light"></input>

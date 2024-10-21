@@ -32,7 +32,7 @@
 
         <div style="width: fit-content; height: fit-content;">
             <h2>{{ __('Checkout') }}</h2>
-            <form action="{{ route('checkout.process') }}" method="post">
+            <form action="{{ route('checkout') }}" method="post">
                 @csrf
                 <div style="display: flex; flex-direction: column;">
                     <label for="name">{{ __('Name') }}:</label>

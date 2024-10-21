@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot name="title"> {{ __('Products') }} </x-slot>
+    <x-slot name="title"> {{ __('Store') }} </x-slot>
 
     <x-header />
     
@@ -18,7 +18,7 @@
                     <tr>
                         <x-display-product :product="$product" />
                         <td>
-                            <form action="{{ route('products.store') }}" method="post">
+                            <form action="{{ route('cart.add') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="submit" value="{{ __('Add') }}" class="btn btn-light"></input>

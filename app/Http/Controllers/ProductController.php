@@ -3,94 +3,102 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Order;
 use Illuminate\Http\Request;
-use App\Http\Requests\ProductIdRequest;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\OrderConfirmation;
 
 class ProductController extends Controller
 {
-    //see products not added to the cart
-    public function index(Request $request) 
+    //list all products
+    public function index()
     {
-        $this->initializeCart($request);
-        
-        $products =  Product::notInCart($request);
-        return view('products',['products'=>$products]);
+        $products =  Product::all();
+        return view('edit_page',['products'=>$products]);
     }
 
-    //add product to cart
-    public function store(ProductIdRequest  $request) 
+    //create product
+    public function create()
     {
-        $this->initializeCart($request);
+        return view('add_product');
+    }
 
-        $id = $request->id;
-        $productsInCart = collect($request->session()->get('productsInCart', []));
-        
-        if (!$productsInCart->contains($id)) {
-            $productsInCart->push($id);
-            $request->session()->put('productsInCart', $productsInCart->all());
+    //store product
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'description' => 'required|string',
+                'image' => 'required|image',
+            ]);
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('images/', $filename);
+
+            $info = ['title' => $request->title, 'price' => $request->price, 'description' => $request->description, 'image_path' => $filename];
+
+            Product::create($info);
+            return redirect()->route('products.index')->with('success', __('Product created'));
+        } catch (\Exception $e) {
+            return back()->withErrors(__('Product couldnt be created'));
         }
-
-        return redirect()->route('products.index')->with('success', __('Product added to cart'));
     }
 
-    //see products in cart
-    public function cart(Request $request) 
+    //edit product
+    public function edit($id)
     {
-        $this->initializeCart($request);
+        try {
+            $product = Product::findOrFail($id);
 
-        $productsInCart = $request->session()->get('productsInCart', []);
-        $products = Product::whereIn('id', $productsInCart)->get();
-
-        return view('cart', ['products' => $products]);
+            return view('edit_product', ['product' => $product]);
+        } catch (\Exception $e) {
+            return back()->withErrors(__('Did not find product'));
+        }
     }
 
-    //remove from cart
-    public function clearCart(ProductIdRequest $request) 
+    //update product
+    public function update(Request $request, $id)
     {
-        $productId = $request->id;
-        $productsInCart = $request->session()->get('productsInCart', []);
-    
-        $productsInCart = array_filter($productsInCart, function ($id) use ($productId) 
-        {
-            return $id != $productId;
-        });
-    
-        $request->session()->put('productsInCart', $productsInCart);
-    
-        return redirect()->route('cart')->with('success', __('Product removed'));
+        try {
+            $request->validate([
+              'title' => 'string|max:255',
+              'price' => 'numeric|min:0',
+              'description' => 'string',
+              'image'=> 'image',
+            ]);
+      
+            $product = Product::findOrFail($id);
+
+            if ($request->hasFile('image')) {
+                $destination = 'images/' . $product->image_path;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() .'.'. $extension;
+                $file->move('images/', $filename);
+                $product->image_path = $filename;
+            }
+
+            $product->update($request->all());
+            return redirect()->route('products.index')->with('success', __('Product updated'));
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->withErrors(__('Product couldnt be edited'));
+        }
     }
 
-    //send mail
-    public function processCheckout(Request $request)
+    //delete product
+    public function destroy($id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'details' => 'required|string',
-            'comments' => 'required|string',
-        ]);
+        try {
+            $product = Product::findOrFail($id);
+            $product->delete();
 
-        $productsInCart = $request->session()->get('productsInCart', []);
-        $products = Product::whereIn('id', $productsInCart)->get();
-        $totalPrice = $products->sum('price');
-
-        Mail::to('denisa.olaru179@gmail.com')->send(new OrderConfirmation($products, $request->all()));
-        
-        $info = ['customer_name' => $request->name, 'contact_details' => $request->details, 'comments' => $request->comments, 'total_price' => $totalPrice];
-
-        Order::create($info);
-        
-        $request->session()->forget('productsInCart');
-
-        return redirect()->route('products.index')->with('success',  __('Order placed successfully'));
-    }
-
-    private function initializeCart(Request $request) 
-    {
-        if (!$request->session()->has('productsInCart')) {
-            $request->session()->put('productsInCart', []);
+            return redirect()->route('products.index')->with('success', __('Product removed'));
+        } catch (\Exception $e) {
+            return back()->withErrors(__('Product couldnt be removed'));
         }
     }
 }

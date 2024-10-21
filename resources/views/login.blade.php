@@ -6,7 +6,7 @@
     <x-validation-messages />
 
     <h2 style="margin-left: 20px;">{{ __('Login info') }}</h2>
-    <form action="{{ route('login.submit') }}" method="post">
+    <form action="{{ route('login') }}" method="post">
         @csrf
         <div style="display: flex; flex-direction: column; width: fit-content; height: fit-content; margin-left: 20px;">
             <label for="username">{{ __('Username:') }}</label>

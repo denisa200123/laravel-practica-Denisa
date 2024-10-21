@@ -16,12 +16,12 @@ class Admin
     public function handle(Request $request, Closure $next)
     {
         //admin can't access login
-        if (session(key: 'is_admin') && $request->route()->named('login.show')) {
+        if (session(key: 'is_admin') && $request->route()->named('login.form')) {
             return redirect('/');
         }
 
         //login form can be accessed only if admin is not already logged in
-        if (!session('is_admin') && $request->route()->named('login.show')) {
+        if (!session('is_admin') && $request->route()->named('login.form')) {
             return $next($request);
         }
 

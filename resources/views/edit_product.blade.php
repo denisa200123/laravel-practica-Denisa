@@ -15,9 +15,9 @@
                     <th>{{ __('Edit') }}</th>
                 </tr>
                 <tr>
-                    <form action="{{ route('edit.product', $product->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('products.update', $product->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')
                         <td> <input type="text" id="title" name="title" value="{{ $product->title }}"> </td>
                         <td> <input type="number" name="price" id="price" step="0.01" min="0" value="{{ $product->price }}"> </td>
                         <td> <input type="text" id="description" name="description" value="{{ $product->description }}"> </td>

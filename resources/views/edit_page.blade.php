@@ -1,6 +1,6 @@
 <x-layout>
 
-    <x-slot name="title"> {{ __('Edit page') }}</x-slot>
+    <x-slot name="title"> {{ __('Products') }}</x-slot>
 
     <x-header />
 
@@ -20,13 +20,13 @@
                     <tr>
                         <x-display-product :product="$product" />
                         <td>
-                            <form action="{{ route('edit.product.page', $product->id) }}" method="post">
+                            <form action="{{ route('products.edit', $product->id) }}" method="get">
                                 @csrf
                                 <input type="submit" value="{{ __('Edit') }}" class="btn btn-warning"></input>
                             </form>
                         </td>
                         <td>
-                            <form action="{{ route('delete.product', $product->id) }}" method="post">
+                            <form action="{{ route('products.destroy', $product->id) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <input type="submit" value="{{ __('Delete') }}" class="btn btn-danger"></input>
