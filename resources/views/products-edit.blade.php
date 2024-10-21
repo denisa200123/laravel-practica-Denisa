@@ -9,6 +9,7 @@
     @if ($product)
 
         <div style="margin-left: 10px; margin-bottom: 10px;">
+            <h2>{{ __('Edit product') }}</h2>
             <table border="1" cellpadding="10">
                 <tr>
                     <x-display-product-details> </x-display-product-details>

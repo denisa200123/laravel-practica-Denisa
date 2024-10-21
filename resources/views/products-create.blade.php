@@ -1,6 +1,6 @@
 <x-layout>
 
-    <x-slot name="title"> {{ __('Add product') }}</x-slot>
+    <x-slot name="title"> {{ __('Create product') }}</x-slot>
 
     <x-header />
 

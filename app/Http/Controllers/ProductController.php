@@ -11,13 +11,13 @@ class ProductController extends Controller
     public function index()
     {
         $products =  Product::all();
-        return view('edit_page',['products'=>$products]);
+        return view('products', ['products'=>$products]);
     }
 
     //create product
     public function create()
     {
-        return view('add_product');
+        return view('products-create');
     }
 
     //store product
@@ -51,7 +51,7 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
 
-            return view('edit_product', ['product' => $product]);
+            return view('products-edit', ['product' => $product]);
         } catch (\Exception $e) {
             return back()->withErrors(__('Did not find product'));
         }

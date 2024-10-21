@@ -15,7 +15,7 @@
                 {{ __('Products') }}
             </x-header-anchor>
             <x-header-anchor href="{{ route('products.create') }}" :active="request()->is('products/create')">
-                {{ __('Add products') }}
+                {{ __('Create product') }}
             </x-header-anchor>
             <x-header-anchor href="{{ route('orders.index') }}" :active="request()->is('orders')">
                 {{ __('See orders') }}

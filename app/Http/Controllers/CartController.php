@@ -24,7 +24,7 @@ class CartController extends Controller
         $this->initializeCart($request);
         
         $products =  Product::notInCart($request);
-        return view('products',['products'=>$products]);
+        return view('home',['products'=>$products]);
     }
 
     //add product to cart
