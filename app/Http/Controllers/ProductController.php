@@ -8,19 +8,6 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    //list all products
-    public function index()
-    {
-        $products =  Product::all();
-        return view('products', ['products'=>$products]);
-    }
-
-    //create product
-    public function create()
-    {
-        return view('products-create');
-    }
-
     //store product
     public function store(Request $request)
     {

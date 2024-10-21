@@ -6,6 +6,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
+use App\Models\Order;
+use App\Models\Product;
 
 Route::middleware(['setLocale'])->group(function () {
 
@@ -19,8 +21,8 @@ Route::middleware(['setLocale'])->group(function () {
     
     Route::middleware(['admin'])->group(function () {
         Route::controller(ProductController::class)->group(function () {
-            Route::get('/products', 'index')->name('products.index');
-            Route::get('/products/create', 'create')->name('products.create');
+            Route::view('/products', 'products', ['products'=>Product::all()])->name('products.index');
+            Route::view('/products/create', 'products-create')->name('products.create');
             Route::post('/products', 'store')->name('products.store');
             Route::get('/products/{product}/edit', 'edit')->name('products.edit');
             Route::patch('/products/{product}', 'update')->name('products.update');
@@ -29,12 +31,11 @@ Route::middleware(['setLocale'])->group(function () {
     });
     
     Route::controller(LoginController::class)->group(function () {
-        Route::get('/login', 'loginForm')->name('login.form')->middleware('admin');
+        Route::view('/login', 'login')->name('login.form')->middleware('admin');
         Route::post('/login', 'login')->name('login');
         Route::get('/logout', 'destroy')->name('login.destroy')->middleware('admin');
     });
 
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware('admin');
-
+    Route::view('/orders', 'orders', ['orders'=>Order::all()])->name('orders.index')->middleware('admin');
     Route::post('/set-language', [LanguageController::class, 'setLanguage'])->name('set.language');
 });
