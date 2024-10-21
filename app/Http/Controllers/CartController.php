@@ -83,7 +83,7 @@ class CartController extends Controller
         $products = Product::whereIn('id', $productsInCart)->get();
         $totalPrice = $products->sum('price');
 
-        Mail::to('denisa.olaru179@gmail.com')->send(new OrderConfirmation($products, $request->all()));
+        Mail::to(env('USER_EMAIL'))->queue(new OrderConfirmation($products, $request->all()));
         
         $info = ['customer_name' => $request->name, 'contact_details' => $request->details, 'comments' => $request->comments, 'total_price' => $totalPrice];
 
