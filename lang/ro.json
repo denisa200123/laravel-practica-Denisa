@@ -56,5 +56,9 @@
     "Customer name": "Nume client",
     "Contact details": "Detalii de contact",
     "Comments": "Comentarii",
-    "Orders": "Comenzi"
+    "Orders": "Comenzi",
+    "Search products": "Cauta produse",
+    "Search": "Cauta",
+    "Product": "Produs",
+    "Products found": "Produse gasite"
 }

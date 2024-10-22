@@ -10,7 +10,13 @@
         <div style="margin-left: 10px; margin-bottom: 10px;">
             <h2>{{ __('All the products:') }}</h2>
             
-            <table border="1" cellpadding="10">
+
+            <form action="{{ route('products.search') }}" method="GET">
+                <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search products')}}">
+                <input type="submit" value="{{ __('Search') }}" class="btn btn-info"></input>
+            </form>
+
+            <table border="1" cellpadding="10" style="margin-top: 10px;">
                 <tr>
                     <x-display-product-details> </x-display-product-details>
                     <th>{{ __('Edit product') }}</th>

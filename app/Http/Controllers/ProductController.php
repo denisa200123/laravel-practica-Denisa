@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    //search product
+    public function search(Request $request)
+    {
+        $request->validate(['searchedProduct' => 'string|max:255']);
+        $products = Product::where('title', 'like', "%$request->searchedProduct%")->get();
+        
+        if ($products && count($products) > 0) {
+            return view('/products-search', ['products' => $products]);
+        }
+        return back()->withErrors(__('Product not found'));
+    }
+
     //store product
     public function store(Request $request)
     {
@@ -50,12 +62,12 @@ class ProductController extends Controller
     {
         try {
             $request->validate([
-              'title' => 'string|max:255',
-              'price' => 'numeric|min:0',
-              'description' => 'string',
-              'image'=> 'image',
+                'title' => 'string|max:255',
+                'price' => 'numeric|min:0',
+                'description' => 'string',
+                'image' => 'image',
             ]);
-      
+
             $product = Product::findOrFail($id);
 
             if ($request->hasFile('image')) {
@@ -65,7 +77,7 @@ class ProductController extends Controller
                 }
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
-                $filename = time() .'.'. $extension;
+                $filename = time() . '.' . $extension;
                 $file->move('images/', $filename);
                 $product->image_path = $filename;
             }
@@ -89,4 +101,5 @@ class ProductController extends Controller
             return back()->withErrors(__('Product couldnt be removed'));
         }
     }
+
 }
