@@ -5,9 +5,26 @@ namespace App\Http\Controllers;
 use File;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Session;
 
 class ProductController extends Controller
 {
+    //order products
+    public function order(Request $request)
+    {
+        //validate
+        $request->validate(['orderBy' => 'string|max:255|min:1']);
+        $orderBy = $request->orderBy;
+        Session::put('orderBy', $orderBy);
+
+        $products = Product::orderBy(Session::get('orderBy'), 'asc')->paginate(3);
+
+        if ($products && count($products) > 0 && Session::get('orderBy')) {
+            return view('products', ['products' => $products]);
+        }
+        return redirect()->route('products.index')->withErrors(__('Product not found'));
+    }
+
     //search product
     public function search(Request $request)
     {

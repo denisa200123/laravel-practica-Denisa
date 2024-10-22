@@ -28,6 +28,7 @@ Route::middleware(['setLocale'])->group(function () {
             Route::patch('/products/{product}', 'update')->name('products.update');
             Route::delete('/products/{product}', 'destroy')->name('products.destroy');
             Route::get('/products/search', 'search')->name('products.search');
+            Route::get('/products/order', 'order')->name('products.order');
         });
     });
     

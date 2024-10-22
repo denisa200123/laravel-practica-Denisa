@@ -7,14 +7,37 @@
     <x-validation-messages />
 
     @if ($products && count($products) > 0)
-        <div style="margin-left: 10px; margin-bottom: 10px;">
+        <div style="margin-left: 10px; margin-bottom: 10px; width: fit-content; height: fit-content;">
             <h2>{{ __('All the products:') }}</h2>
             
 
-            <form action="{{ route('products.search') }}" method="GET">
-                <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search products')}}">
-                <input type="submit" value="{{ __('Search') }}" class="btn btn-info"></input>
-            </form>
+            <div style="display: flex; justify-content:space-between;">
+                <form action="{{ route('products.order') }}" method="GET" style="width: fit-content; height: fit-content;">    
+                    <select name="orderBy" id="orderBy">
+                        <option value="none"> none</option>
+                
+                        <option value="title">
+                            title
+                        </option>
+                
+                        <option value="price">
+                            price
+                        </option>
+                
+                        <option value="description" >
+                            description
+                        </option>
+                    </select>
+                
+                    <input type="submit" value="{{ __('Order by') }}" class="btn btn-info"></input>
+                </form>
+                
+
+                <form action="{{ route('products.search') }}" method="GET" style="width: fit-content; height: fit-content;">
+                    <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search products')}}">
+                    <input type="submit" value="{{ __('Search') }}" class="btn btn-info"></input>
+                </form>
+            </div>
 
             <table border="1" cellpadding="10" style="margin-top: 10px;">
                 <tr>
