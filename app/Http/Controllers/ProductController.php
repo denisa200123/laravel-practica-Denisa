@@ -11,13 +11,14 @@ class ProductController extends Controller
     //search product
     public function search(Request $request)
     {
-        $request->validate(['searchedProduct' => 'string|max:255']);
-        $products = Product::where('title', 'like', "%$request->searchedProduct%")->get();
-        
-        if ($products && count($products) > 0) {
+        $request->validate(['searchedProduct' => 'string|max:255|min:1']);
+        $name = $request->searchedProduct;
+
+        $products = Product::where('title', 'like', "%$name%")->get();
+        if ($products && count($products) > 0 && $name) {
             return view('/products-search', ['products' => $products]);
         }
-        return back()->withErrors(__('Product not found'));
+        return redirect()->route('products.index')->withErrors(__('Product not found'));
     }
 
     //store product
