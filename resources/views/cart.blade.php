@@ -19,9 +19,8 @@
                     <tr>
                         <x-display-product :product="$product" />
                         <td>
-                            <form action="{{ route('cart.clear') }}" method="post">
+                            <form action="{{ route('cart.clear', $product->id) }}" method="post">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="submit" value="{{ __('Remove') }}" class="btn btn-light"></input>
                             </form>
                         </td>
@@ -37,12 +36,11 @@
                 <div style="display: flex; flex-direction: column;">
                     <label for="name">{{ __('Name') }}:</label>
                     <input type="text" id="name" name="name" required value="{{ old('name') }}">
-        
                     <label for="details">{{ __('Order details:') }}</label>
                     <input type="text" id="details" name="details" required value="{{ old('details') }}">
         
                     <label for="comments">{{ __('Comments:') }}</label>
-                    <textarea id="comments" name="comments" required value="{{ old('comments') }}"></textarea>
+                    <textarea id="comments" name="comments" value="{{ old('comments') }}"></textarea>
         
                     <br>
         
@@ -55,5 +53,5 @@
     @else
         <h2 style="margin-left: 10px;">{{ __('Your cart is empty') }}</h2>
     @endif
-
+    
 </x-layout>

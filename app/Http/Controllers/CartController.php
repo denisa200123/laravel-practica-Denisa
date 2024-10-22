@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
-use App\Http\Requests\ProductIdRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmation;
 
@@ -27,24 +26,8 @@ class CartController extends Controller
         return view('home',['products'=>$products]);
     }
 
-    //add product to cart
-    public function addCart(ProductIdRequest  $request) 
-    {
-        $this->initializeCart($request);
-
-        $id = $request->id;
-        $productsInCart = collect($request->session()->get('productsInCart', []));
-        
-        if (!$productsInCart->contains($id)) {
-            $productsInCart->push($id);
-            $request->session()->put('productsInCart', $productsInCart->all());
-        }
-
-        return redirect()->route('home')->with('success', __('Product added to cart'));
-    }
-
     //see products in cart
-    public function cart(Request $request) 
+    public function cart(Request $request)
     {
         $this->initializeCart($request);
 
@@ -54,20 +37,45 @@ class CartController extends Controller
         return view('cart', ['products' => $products]);
     }
 
-    //remove from cart
-    public function clearCart(ProductIdRequest $request) 
+    //add product to cart
+    public function addCart(Request $request, $id) 
     {
-        $productId = $request->id;
-        $productsInCart = $request->session()->get('productsInCart', []);
+        try {
+            //if the product is not found => fail and display message
+            $product = Product::findOrFail($id);
+            $this->initializeCart($request);
+            $productsInCart = collect($request->session()->get('productsInCart', []));
+            
+            if (!$productsInCart->contains($id)) {
+                $productsInCart->push($id);
+                $request->session()->put('productsInCart', $productsInCart->all());
+            }
+            return redirect()->route('home')->with('success', __('Product added to cart'));
+        } catch (\Exception $e) {
+            return back()->withErrors(__('The selected product does not exist'));
+        }
+    }
+
+    //remove from cart
+    public function clearCart(Request $request, $id) 
+    {
+        try {
+            //if the product is not found => fail and display message
+            $product = Product::findOrFail($id);
+            $this->initializeCart($request);
+            $productsInCart = $request->session()->get('productsInCart', []);
     
-        $productsInCart = array_filter($productsInCart, function ($id) use ($productId) 
-        {
-            return $id != $productId;
-        });
-    
-        $request->session()->put('productsInCart', $productsInCart);
-    
-        return redirect()->route('cart')->with('success', __('Product removed'));
+            $productId = $id;
+            $productsInCart = array_filter($productsInCart, function ($id) use ($productId) 
+            {
+                return $id != $productId;
+            });
+        
+            $request->session()->put('productsInCart', $productsInCart);
+            return redirect()->route('cart')->with('success', __('Product removed'));
+        } catch (\Exception $e) {
+            return back()->withErrors(__('The selected product does not exist'));
+        }
     }
 
     //send mail
@@ -76,7 +84,6 @@ class CartController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'details' => 'required|string',
-            'comments' => 'required|string',
         ]);
 
         $productsInCart = $request->session()->get('productsInCart', []);

@@ -18,15 +18,18 @@
                     <tr>
                         <x-display-product :product="$product" />
                         <td>
-                            <form action="{{ route('cart.add') }}" method="post">
+                            <form action="{{ route('cart.add', $product->id) }}" method="post">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="submit" value="{{ __('Add') }}" class="btn btn-light"></input>
                             </form>
                         </td>
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div style="margin: 20px 0 0 20px">
+            {{ $products->links('pagination::bootstrap-4') }}
         </div>
 
     @else

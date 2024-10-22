@@ -9,13 +9,14 @@
     @if ($products && count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">
             <h2>{{ __('All the products:') }}</h2>
+            
             <table border="1" cellpadding="10">
                 <tr>
                     <x-display-product-details> </x-display-product-details>
                     <th>{{ __('Edit product') }}</th>
                     <th>{{ __('Remove product') }}</th>
                 </tr>
-
+                
                 @foreach ($products as $product)
                     <tr>
                         <x-display-product :product="$product" />
@@ -35,6 +36,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div style="margin: 20px 0 0 20px">
+            {{ $products->links('pagination::bootstrap-4') }}
         </div>
 
     @else

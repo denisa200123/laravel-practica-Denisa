@@ -29,6 +29,10 @@
             </table>
         </div>
 
+        <div style="margin: 20px 0 0 20px">
+            {{ $orders->links('pagination::bootstrap-4') }}
+        </div>
+
     @else
         <h2 style="margin-left: 10px;">{{ __('No orders to show.') }}</h2>
     @endif

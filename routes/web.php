@@ -14,19 +14,19 @@ Route::middleware(['setLocale'])->group(function () {
     Route::controller(CartController::class)->group(function () {
         Route::get('/', 'home')->name('home');
         Route::get('/cart', 'cart')->name('cart');
-        Route::post('/cart/clear', 'clearCart')->name('cart.clear');
-        Route::post('/cart/add', 'addCart')->name('cart.add');
+        Route::post('/cart/{product}/clear', 'clearCart')->name('cart.clear');
+        Route::post('/cart/{product}/add', 'addCart')->name('cart.add');
         Route::post('/checkout', 'checkout')->name('checkout');
     });
     
     Route::middleware(['admin'])->group(function () {
         Route::controller(ProductController::class)->group(function () {
-            Route::view('/products', 'products', ['products'=>Product::all()])->name('products.index');
+            Route::view('/products', 'products', ['products'=>Product::paginate(3)])->name('products.index');
             Route::view('/products/create', 'products-create')->name('products.create');
             Route::post('/products', 'store')->name('products.store');
             Route::get('/products/{product}/edit', 'edit')->name('products.edit');
             Route::patch('/products/{product}', 'update')->name('products.update');
-            Route::delete('/products/{product}', 'delete')->name('products.destroy');
+            Route::delete('/products/{product}', 'destroy')->name('products.destroy');
         });
     });
     
@@ -36,6 +36,6 @@ Route::middleware(['setLocale'])->group(function () {
         Route::get('/logout', 'destroy')->name('login.destroy')->middleware('admin');
     });
 
-    Route::view('/orders', 'orders', ['orders'=>Order::all()])->name('orders.index')->middleware('admin');
+    Route::view('/orders', 'orders', ['orders'=>Order::paginate(5)])->name('orders.index')->middleware('admin');
     Route::post('/set-language', [LanguageController::class, 'setLanguage'])->name('set.language');
 });
