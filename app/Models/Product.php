@@ -17,6 +17,11 @@ class Product extends Model
         return static::whereNotIn('id', $productsInCart)->paginate(3);
     }
     
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
     protected $fillable = [
         'title',
         'description',
