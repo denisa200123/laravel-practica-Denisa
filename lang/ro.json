@@ -57,8 +57,10 @@
     "Contact details": "Detalii de contact",
     "Comments": "Comentarii",
     "Orders": "Comenzi",
-    "Search products": "Cauta produse",
+    "Search product": "Cauta produs",
     "Search": "Cauta",
     "Product": "Produs",
-    "Products found": "Produse gasite"
+    "Products found": "Produse gasite",
+    "Order": "Ordoneaza",
+    "None": "Nimic"
 }

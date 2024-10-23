@@ -21,7 +21,8 @@ Route::middleware(['setLocale'])->group(function () {
     
     Route::middleware(['admin'])->group(function () {
         Route::controller(ProductController::class)->group(function () {
-            Route::view('/products', 'products', ['products'=>Product::paginate(3)])->name('products.index');
+            Route::get('/products', 'index')->name('products.index');
+            //Route::view('/products', 'products', ['products'=>Product::paginate(3)])->name('products.index');
             Route::view('/products/create', 'products-create')->name('products.create');
             Route::post('/products', 'store')->name('products.store');
             Route::get('/products/{product}/edit', 'edit')->name('products.edit');

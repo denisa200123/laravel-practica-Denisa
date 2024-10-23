@@ -12,17 +12,23 @@ class ProductController extends Controller
     //order products
     public function order(Request $request)
     {
-        //validate
-        $request->validate(['orderBy' => 'string|max:255|min:1']);
+        $request->validate(['orderBy' => 'string|max:20|min:1|in:title,price,description,none']);
         $orderBy = $request->orderBy;
-        Session::put('orderBy', $orderBy);
-
-        $products = Product::orderBy(Session::get('orderBy'), 'asc')->paginate(3);
-
-        if ($products && count($products) > 0 && Session::get('orderBy')) {
+        
+        if ($orderBy) {
+            Session::put('orderBy', $orderBy);
+        }
+        
+        if (Session::get('orderBy') === 'none') {
+            $products = Product::paginate(3);
+        } else {
+            $products = Product::orderBy(Session::get('orderBy'), 'asc')->paginate(3);
+        }
+        
+        if ($products && count($products)>0) {
             return view('products', ['products' => $products]);
         }
-        return redirect()->route('products.index')->withErrors(__('Product not found'));
+        return redirect()->route('products.index');
     }
 
     //search product
@@ -36,6 +42,13 @@ class ProductController extends Controller
             return view('/products-search', ['products' => $products]);
         }
         return redirect()->route('products.index')->withErrors(__('Product not found'));
+    }
+
+    //display all products
+    public function index(Request $request)
+    {
+        Session::put('orderBy', 'none');
+        return View('products', ['products'=>Product::paginate(3)]);
     }
 
     //store product
