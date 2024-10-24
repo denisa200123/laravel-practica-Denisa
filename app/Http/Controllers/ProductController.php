@@ -14,17 +14,17 @@ class ProductController extends Controller
     {
         $request->validate(['orderBy' => 'string|max:20|min:1|in:title,price,description,none']);
         $orderBy = $request->orderBy;
-        
+
         if ($orderBy) {
             Session::put('orderBy', $orderBy);
         }
-        
+
         if (Session::get('orderBy') === 'none') {
             $products = Product::paginate(3);
         } else {
             $products = Product::orderBy(Session::get('orderBy'), 'asc')->paginate(3);
         }
-        
+
         if ($products && count($products)>0) {
             return view('products', ['products' => $products]);
         }

@@ -4,7 +4,7 @@
 
 <table border="1" cellpadding="10">
     <tr>
-        <x-display-product-details> </x-display-product-details>
+        <x-display-product-details />
     </tr>
 
     @foreach ($products as $product)

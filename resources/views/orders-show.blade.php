@@ -1,6 +1,6 @@
 <x-layout>
 
-    <x-slot name="title"> {{ __('Order information') }}</x-slot>
+    <x-slot name="title">{{ __('Order information') }}</x-slot>
 
     <x-header />
 
@@ -15,7 +15,7 @@
             <h3>{{ __('Products ordered') }}</h3>
             <table border="1" cellpadding="10">
                 <tr>
-                    <x-display-product-details> </x-display-product-details>
+                    <x-display-product-details />
                 </tr>
                 @foreach ($order->products as $product)
                     <tr>

@@ -1,5 +1,5 @@
 @if (session('success'))
-    <p class="alert alert-success"> {{ session('success') }} </p>
+    <p class="alert alert-success">{{ session('success') }}</p>
 @endif
 
 @if ($errors->any())

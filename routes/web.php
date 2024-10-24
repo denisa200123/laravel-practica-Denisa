@@ -7,7 +7,6 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
 use App\Models\Order;
-use App\Models\Product;
 
 Route::middleware(['setLocale'])->group(function () {
 
@@ -18,7 +17,7 @@ Route::middleware(['setLocale'])->group(function () {
         Route::post('/cart/{product}/add', 'addCart')->name('cart.add');
         Route::post('/checkout', 'checkout')->name('checkout');
     });
-    
+
     Route::middleware(['admin'])->group(function () {
         Route::controller(ProductController::class)->group(function () {
             Route::get('/products', 'index')->name('products.index');
@@ -31,7 +30,7 @@ Route::middleware(['setLocale'])->group(function () {
             Route::get('/products/order', 'order')->name('products.order');
         });
     });
-    
+
     Route::controller(LoginController::class)->group(function () {
         Route::view('/login', 'login')->name('login.form')->middleware('admin');
         Route::post('/login', 'login')->name('login');

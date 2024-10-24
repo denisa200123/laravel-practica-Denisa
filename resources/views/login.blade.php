@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot name="title"> {{ __('Login') }} </x-slot>
+    <x-slot name="title">{{ __('Login') }}</x-slot>
 
     <x-header />
 
@@ -11,12 +11,12 @@
         <div style="display: flex; flex-direction: column; width: fit-content; height: fit-content; margin-left: 20px;">
             <label for="username">{{ __('Username:') }}</label>
             <input type="text" id="username" name="username" required value="{{ old('username') }}">
-    
+
             <label for="password">{{ __('Password:') }}</label>
             <input type="password" id="password" name="password" required value="{{ old('password') }}">
-            
+
             <br>
-    
+
             <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
         </div>
     </form>

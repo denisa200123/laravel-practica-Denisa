@@ -1,8 +1,8 @@
 <x-layout>
-    <x-slot name="title"> {{ __('Orders') }} </x-slot>
+    <x-slot name="title">{{ __('Orders') }}</x-slot>
 
     <x-header />
-    
+
     <x-validation-messages />
 
     @if (count($orders) > 0)
@@ -10,7 +10,7 @@
             <h2>{{ __('Orders:') }}</h2>
             <table border="1" cellpadding="10">
                 <tr>
-                    <x-display-order-details> </x-display-order-details>
+                    <x-display-order-details />
                     <th>{{ __('See details') }}</th>
                 </tr>
 
