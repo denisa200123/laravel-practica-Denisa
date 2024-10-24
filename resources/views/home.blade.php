@@ -5,7 +5,7 @@
     
     <x-validation-messages />
 
-    @if ($products && count($products) > 0)
+    @if (count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">
             <h2>{{ __('What you can buy:') }}</h2>
             <table border="1" cellpadding="10">

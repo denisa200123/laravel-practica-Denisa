@@ -5,7 +5,7 @@
     
     <x-validation-messages />
 
-    @if ($orders && count($orders) > 0)
+    @if (count($orders) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px;">
             <h2>{{ __('Orders:') }}</h2>
             <table border="1" cellpadding="10">
@@ -18,9 +18,8 @@
                     <tr>
                         <x-display-order :order="$order" />
                         <td>
-                            <form action="{{ route('orders.index') }}" method="post">
+                            <form action="{{ route('orders.show', $order->id) }}" method="get">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $order->id }}">
                                 <input type="submit" value="{{ __('See details') }}" class="btn btn-light"></input>
                             </form>
                         </td>

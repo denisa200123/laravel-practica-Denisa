@@ -5,7 +5,7 @@
 
     <x-validation-messages />
 
-    @if ($products && count($products) > 0)
+    @if (count($products) > 0)
     <div style="display: flex; padding: 40px 60px; gap: 100px;">
         <div style="margin-left: 50px; width: fit-content; height:  fit-content;">
             <h2> {{ __('Your cart') }} </h2>

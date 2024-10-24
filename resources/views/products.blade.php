@@ -6,7 +6,7 @@
 
     <x-validation-messages />
     
-    @if ($products && count($products) > 0)
+    @if (count($products) > 0)
         <div style="margin-left: 10px; margin-bottom: 10px; width: fit-content; height: fit-content;">
             <h2>{{ __('All the products:') }}</h2>
             
