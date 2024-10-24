@@ -10,7 +10,7 @@ use App\Mail\OrderConfirmation;
 
 class CartController extends Controller
 { 
-    private function initializeCart(Request $request) 
+    private function initializeCart(Request $request)
     {
         if (!$request->session()->has('productsInCart')) {
             $request->session()->put('productsInCart', []);
@@ -18,11 +18,11 @@ class CartController extends Controller
     }
 
     //list all products that aren't in cart
-    public function home(Request $request) 
+    public function home(Request $request)
     {
         $this->initializeCart($request);
-        
-        $products =  Product::notInCart($request);
+
+        $products = Product::notInCart($request);
         return view('home',['products'=>$products]);
     }
 
@@ -38,14 +38,12 @@ class CartController extends Controller
     }
 
     //add product to cart
-    public function addCart(Request $request, $id) 
+    public function addCart(Request $request, $id)
     {
         try {
-            //if the product is not found => fail and display message
-            $product = Product::findOrFail($id);
             $this->initializeCart($request);
             $productsInCart = collect($request->session()->get('productsInCart', []));
-            
+
             if (!$productsInCart->contains($id)) {
                 $productsInCart->push($id);
                 $request->session()->put('productsInCart', $productsInCart->all());
@@ -57,21 +55,17 @@ class CartController extends Controller
     }
 
     //remove from cart
-    public function clearCart(Request $request, $id) 
+    public function clearCart(Request $request, $id)
     {
         try {
-            //if the product is not found => fail and display message
-            $product = Product::findOrFail($id);
             $this->initializeCart($request);
             $productsInCart = $request->session()->get('productsInCart', []);
-    
-            $productId = $id;
-            $productsInCart = array_filter($productsInCart, function ($id) use ($productId) 
-            {
-                return $id != $productId;
-            });
-        
-            $request->session()->put('productsInCart', $productsInCart);
+
+            if (($key = array_search($id, $productsInCart)) !== false) {
+                unset($productsInCart[$key]);
+                $request->session()->put('productsInCart', $productsInCart);
+            }
+
             return redirect()->route('cart')->with('success', __('Product removed'));
         } catch (\Exception $e) {
             return back()->withErrors(__('The selected product does not exist'));
@@ -105,6 +99,6 @@ class CartController extends Controller
 
         $request->session()->forget('productsInCart');
 
-        return redirect()->route('home')->with('success',  __('Order placed successfully'));
+        return redirect()->route('home')->with('success', __('Order placed successfully'));
     }
 }
