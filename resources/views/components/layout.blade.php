@@ -13,7 +13,7 @@
             }
 
             table {
-                width: 1000px
+                width: 1000px;
             }
         </style>
     </head>
