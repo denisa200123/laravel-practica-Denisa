@@ -39,6 +39,7 @@
     <select name="lang" id="lang" onchange="this.form.submit()">
         <option value="en" @if (session('locale', 'en') == 'en') selected @endif>{{ __('English') }}</option>
         <option value="ro" @if (session('locale') == 'ro') selected @endif>{{ __('Romanian') }}</option>
+        <option value="es" @if (session('locale') == 'es') selected @endif>{{ __('Spanish') }}</option>
     </select>
 </form>
 
