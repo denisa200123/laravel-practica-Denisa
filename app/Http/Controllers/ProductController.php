@@ -48,7 +48,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         Session::put('orderBy', 'none');
-        return View('products', ['products'=>Product::paginate(3)]);
+        return view('products', ['products'=>Product::paginate(3)]);
     }
 
     //store product

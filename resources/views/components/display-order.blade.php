@@ -3,4 +3,4 @@
 <td>{{ $order->contact_details }}</td>
 <td>{{ $order->comments }}</td>
 <td>{{ $order->total_price }}</td>
-<td>{{ $order->created_at }}</td>
+<td>{{ $order->created_at->format('Y-m-d') }}</td>
