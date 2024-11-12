@@ -12,20 +12,33 @@ class ProductController extends Controller
     //display all products
     public function index(Request $request)
     {
+        $request->session()->forget('name');
+        $request->session()->forget('orderBy');
+        $products = Product::paginate(2);
+        return view('products', ['products' => $products]);
+    }
+
+    public function order(Request $request)
+    {
         $request->validate([
             'orderBy' => 'string|max:20|min:1|in:title,price,description,none',
             'searchedProduct' => 'string|max:255|min:1'
         ]);
-        $orderBy = $request->orderBy;
-        $name = $request->searchedProduct;
+
+        $orderBy = $request->input('orderBy');
+        $name = $request->input('searchedProduct');
         $query = Product::query();
 
         if ($name) {
-            $query->where('title', 'like', "%$name%");
+            Session::put('name', $name);
         }
 
         if ($orderBy) {
             Session::put('orderBy', $orderBy);
+        }
+
+        if (!empty(Session::get('name'))) {
+            $query->where('title', 'like', '%' . Session::get('name') . '%');
         }
 
         if (Session::get('orderBy') !== 'none' && !empty(Session::get('orderBy'))) {
