@@ -9,46 +9,34 @@ use Session;
 
 class ProductController extends Controller
 {
-    //order products
-    public function order(Request $request)
+    //display all products
+    public function index(Request $request)
     {
-        $request->validate(['orderBy' => 'string|max:20|min:1|in:title,price,description,none']);
+        $request->validate([
+            'orderBy' => 'string|max:20|min:1|in:title,price,description,none',
+            'searchedProduct' => 'string|max:255|min:1'
+        ]);
         $orderBy = $request->orderBy;
+        $name = $request->searchedProduct;
+        $query = Product::query();
+
+        if ($name) {
+            $query->where('title', 'like', "%$name%");
+        }
 
         if ($orderBy) {
             Session::put('orderBy', $orderBy);
         }
 
-        if (Session::get('orderBy') === 'none') {
-            $products = Product::paginate(3);
-        } else {
-            $products = Product::orderBy(Session::get('orderBy'), 'asc')->paginate(3);
+        if (Session::get('orderBy') !== 'none' && !empty(Session::get('orderBy'))) {
+            $query->orderBy(Session::get('orderBy'), 'asc');
         }
 
-        if ($products && count($products)>0) {
-            return view('products', ['products' => $products]);
-        }
-        return redirect()->route('products.index');
-    }
-
-    //search product
-    public function search(Request $request)
-    {
-        $request->validate(['searchedProduct' => 'string|max:255|min:1']);
-        $name = $request->searchedProduct;
-
-        $products = Product::where('title', 'like', "%$name%")->get();
-        if ($products && count($products) > 0 && $name) {
-            return view('/products-search', ['products' => $products]);
-        }
-        return redirect()->route('products.index')->withErrors(__('Product not found'));
-    }
-
-    //display all products
-    public function index(Request $request)
-    {
-        Session::put('orderBy', 'none');
-        return view('products', ['products'=>Product::paginate(3)]);
+        $products = $query->paginate(2)->appends([
+            'searchedProduct' => $name,
+            'orderBy' => $orderBy
+        ]);
+        return view('products', ['products' => $products]);
     }
 
     //store product

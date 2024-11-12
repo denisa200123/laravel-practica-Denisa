@@ -13,10 +13,10 @@ class Product extends Model
     static function notInCart(Request $request)
     {
         $productsInCart = $request->session()->get('productsInCart', []);
-        
+
         return static::whereNotIn('id', $productsInCart)->paginate(3);
     }
-    
+
     public function orders()
     {
         return $this->belongsToMany(Order::class);

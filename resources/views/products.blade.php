@@ -12,7 +12,7 @@
 
 
             <div style="display: flex; justify-content:space-between;">
-                <form action="{{ route('products.order') }}" method="GET" style="width: fit-content; height: fit-content;">
+                <form action="{{ route('products.index') }}" method="GET" style="width: fit-content; height: fit-content;">
                     <select name="orderBy" id="orderBy">
                         <option value="none">
                             {{ __('None') }}
@@ -34,7 +34,7 @@
                     <input type="submit" value="{{ __('Order') }}" class="btn btn-info"></input>
                 </form>
 
-                <form action="{{ route('products.search') }}" method="GET" style="width: fit-content; height: fit-content;">
+                <form action="{{ route('products.index') }}" method="GET" style="width: fit-content; height: fit-content;">
                     <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search product')}}">
                     <input type="submit" value="{{ __('Search') }}" class="btn btn-info"></input>
                 </form>
