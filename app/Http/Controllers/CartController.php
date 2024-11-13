@@ -75,30 +75,34 @@ class CartController extends Controller
     //send mail
     public function checkout(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'details' => 'required|string',
-        ]);
-
-        $productsInCart = $request->session()->get('productsInCart', []);
-        $products = Product::whereIn('id', $productsInCart)->get();
-        $totalPrice = $products->sum('price');
-
-        Mail::to(env('USER_EMAIL'))->queue(new OrderConfirmation($products, $request->all()));
-
-        $order = Order::create([
-            'customer_name' => $request->name,
-            'contact_details' => $request->details,
-            'comments' => $request->comments,
-            'total_price' => $totalPrice
-        ]);
-
-        if ($products->isNotEmpty()) {
-            $order->products()->attach($products->pluck('id')->toArray());
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'details' => 'required|string',
+            ]);
+    
+            $productsInCart = $request->session()->get('productsInCart', []);
+            $products = Product::whereIn('id', $productsInCart)->get();
+            $totalPrice = $products->sum('price');
+    
+            Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($products, $request->all()));
+    
+            $order = Order::create([
+                'customer_name' => $request->name,
+                'contact_details' => $request->details,
+                'comments' => $request->comments,
+                'total_price' => $totalPrice
+            ]);
+    
+            if ($products->isNotEmpty()) {
+                $order->products()->attach($products->pluck('id')->toArray());
+            }
+    
+            $request->session()->forget('productsInCart');
+    
+            return redirect()->route('home')->with('success', __('Order placed successfully'));
+        } catch (\Exception $e) {
+            return back()->withErrors(__('Mail could not be sent'));
         }
-
-        $request->session()->forget('productsInCart');
-
-        return redirect()->route('home')->with('success', __('Order placed successfully'));
     }
 }
