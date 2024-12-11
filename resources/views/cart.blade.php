@@ -19,7 +19,7 @@
                     <tr>
                         <x-display-product :product="$product" />
                         <td>
-                            <form action="{{ route('cart.clear', $product->id) }}" method="post">
+                            <form action="{{ route('cart.remove', $product->id) }}" method="post">
                                 @csrf
                                 <input type="submit" value="{{ __('Remove') }}" class="btn btn-light"></input>
                             </form>

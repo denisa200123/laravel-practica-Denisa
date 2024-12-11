@@ -12,21 +12,21 @@
 
 
             <div style="display: flex; justify-content:space-between;">
-                <form action="{{ route('products.order') }}" method="GET" style="width: fit-content; height: fit-content;">
+                <form action="{{ route('products.index') }}" method="GET" style="width: fit-content; height: fit-content;">
                     <select name="orderBy" id="orderBy">
                         <option value="none">
                             {{ __('None') }}
                         </option>
 
-                        <option value="title" {{ (Session::get('orderBy') === 'title') ? 'selected' : ''}}>
+                        <option value="title" {{ (Session::get('order_by') === 'title') ? 'selected' : ''}}>
                             {{ __('Name') }}
                         </option>
 
-                        <option value="price" {{ (Session::get('orderBy') === 'price') ? 'selected' : ''}}>
+                        <option value="price" {{ (Session::get('order_by') === 'price') ? 'selected' : ''}}>
                             {{ __('Price') }}
                         </option>
 
-                        <option value="description" {{ (Session::get('orderBy') === 'description') ? 'selected' : ''}}>
+                        <option value="description" {{ (Session::get('order_by') === 'description') ? 'selected' : ''}}>
                             {{ __('Description') }}
                         </option>
                     </select>
@@ -34,7 +34,7 @@
                     <input type="submit" value="{{ __('Order') }}" class="btn btn-info"></input>
                 </form>
 
-                <form action="{{ route('products.order') }}" method="GET" style="width: fit-content; height: fit-content;">
+                <form action="{{ route('products.index') }}" method="GET" style="width: fit-content; height: fit-content;">
                     <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search product')}}">
                     <input type="submit" value="{{ __('Search') }}" class="btn btn-info"></input>
                 </form>
@@ -51,7 +51,7 @@
                     <tr>
                         <x-display-product :product="$product" />
                         <td>
-                            <form action="{{ route('products.edit', $product->id) }}" method="get">
+                            <form action="{{ route('products.show', $product->id) }}" method="get">
                                 @csrf
                                 <input type="submit" value="{{ __('Edit') }}" class="btn btn-warning"></input>
                             </form>

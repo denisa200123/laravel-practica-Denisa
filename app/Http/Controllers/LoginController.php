@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Session;
 
 class LoginController extends Controller
 {
+    public function loginForm()
+    {
+        return view('login');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -14,16 +20,16 @@ class LoginController extends Controller
         ]);
 
         if ($request->username === env('ADMIN_USERNAME') && $request->password === env('ADMIN_PASSWORD')) {
-            $request->session()->put('is_admin', true);
+            Session::put('is_admin', true);
             return redirect()->route('home')->with('success', __('Successfull login!'));
         }
 
         return back()->withErrors(__('Invalid credentials!'));
     }
 
-    public function destroy(Request $request)
+    public function logout(Request $request)
     {
-        $request->session()->forget('is_admin');
+        Session::forget('is_admin');
         return redirect()->route('home');
     }
 }

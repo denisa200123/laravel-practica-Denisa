@@ -14,7 +14,7 @@
             <x-header-anchor href="{{ route('products.index') }}" :active="request()->is('products')">
                 {{ __('Products') }}
             </x-header-anchor>
-            <x-header-anchor href="{{ route('products.create') }}" :active="request()->is('products/create')">
+            <x-header-anchor href="{{ route('products.show') }}" :active="request()->is('products/show')">
                 {{ __('Create product') }}
             </x-header-anchor>
             <x-header-anchor href="{{ route('orders.index') }}" :active="request()->is('orders')">
@@ -22,7 +22,7 @@
             </x-header-anchor>
         </div>
 
-        <x-header-anchor href="{{ route('login.destroy') }}" style="margin-right: 10px;">
+        <x-header-anchor href="{{ route('logout') }}" style="margin-right: 10px;">
             {{ __('Logout') }}
         </x-header-anchor>
     @else
@@ -36,7 +36,7 @@
 
 <form id="langform" action="{{ route('set.language') }}" method="post" style="width: fit-content; height: fit-content; margin-top:10px; margin-left: 10px;">
     @csrf
-    <select name="lang" id="lang" onchange="this.form.submit()">
+    <select name="locale" id="locale" onchange="this.form.submit()">
         <option value="en" @if (session('locale', 'en') == 'en') selected @endif>{{ __('English') }}</option>
         <option value="ro" @if (session('locale') == 'ro') selected @endif>{{ __('Romanian') }}</option>
         <option value="es" @if (session('locale') == 'es') selected @endif>{{ __('Spanish') }}</option>

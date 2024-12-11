@@ -7,13 +7,14 @@ use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmation;
+use Session;
 
 class CartController extends Controller
 { 
     private function initializeCart(Request $request)
     {
-        if (!$request->session()->has('productsInCart')) {
-            $request->session()->put('productsInCart', []);
+        if (!Session::has('products_in_cart')) {
+            Session::put('products_in_cart', []);
         }
     }
 
@@ -22,8 +23,10 @@ class CartController extends Controller
     {
         $this->initializeCart($request);
 
-        $products = Product::notInCart($request);
-        return view('home',['products'=>$products]);
+        $productsInCart = Session::get('products_in_cart', []);
+        $products = Product::whereNotIn('id', $productsInCart)->paginate(3);
+
+        return view('home',['products' => $products]);
     }
 
     //see products in cart
@@ -31,7 +34,7 @@ class CartController extends Controller
     {
         $this->initializeCart($request);
 
-        $productsInCart = $request->session()->get('productsInCart', []);
+        $productsInCart = Session::get('products_in_cart', []);
         $products = Product::whereIn('id', $productsInCart)->get();
 
         return view('cart', ['products' => $products]);
@@ -42,11 +45,11 @@ class CartController extends Controller
     {
         try {
             $this->initializeCart($request);
-            $productsInCart = collect($request->session()->get('productsInCart', []));
+            $productsInCart = collect(Session::get('products_in_cart', []));
 
             if (!$productsInCart->contains($id)) {
                 $productsInCart->push($id);
-                $request->session()->put('productsInCart', $productsInCart->all());
+                Session::put('products_in_cart', $productsInCart->all());
             }
             return redirect()->route('home')->with('success', __('Product added to cart'));
         } catch (\Exception $e) {
@@ -55,15 +58,15 @@ class CartController extends Controller
     }
 
     //remove from cart
-    public function clearCart(Request $request, $id)
+    public function removeCart(Request $request, $id)
     {
         try {
             $this->initializeCart($request);
-            $productsInCart = $request->session()->get('productsInCart', []);
+            $productsInCart = Session::get('products_in_cart', []);
 
             if (($key = array_search($id, $productsInCart)) !== false) {
                 unset($productsInCart[$key]);
-                $request->session()->put('productsInCart', $productsInCart);
+                Session::put('products_in_cart', $productsInCart);
             }
 
             return redirect()->route('cart')->with('success', __('Product removed'));
@@ -80,26 +83,28 @@ class CartController extends Controller
                 'name' => 'required|string|max:255',
                 'details' => 'required|string',
             ]);
-    
-            $productsInCart = $request->session()->get('productsInCart', []);
+
+            $productsInCart = Session::get('products_in_cart', []);
             $products = Product::whereIn('id', $productsInCart)->get();
             $totalPrice = $products->sum('price');
-    
-            Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($products, $request->all()));
-    
+
+            if (!empty(env('USER_EMAIL'))) {
+                Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($products, $request->all()));
+            }
+
             $order = Order::create([
                 'customer_name' => $request->name,
                 'contact_details' => $request->details,
                 'comments' => $request->comments,
                 'total_price' => $totalPrice
             ]);
-    
+
             if ($products->isNotEmpty()) {
-                $order->products()->attach($products->pluck('id')->toArray());
+                $order->products()->attach($products);
             }
-    
-            $request->session()->forget('productsInCart');
-    
+
+            Session::forget('products_in_cart');
+
             return redirect()->route('home')->with('success', __('Order placed successfully'));
         } catch (\Exception $e) {
             return back()->withErrors(__('Mail could not be sent'));

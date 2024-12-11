@@ -6,6 +6,16 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
+    public function index()
+    {
+        try {
+            $orders = Order::paginate(5);
+            return view('orders', ['orders' => $orders]);
+        } catch (\Exception $e) {
+            return back()->withErrors(__('No orders to show.'));
+        }
+    }
+
     public function show($id)
     {
         try {
