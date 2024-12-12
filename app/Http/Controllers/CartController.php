@@ -45,11 +45,11 @@ class CartController extends Controller
     {
         try {
             $this->initializeCart($request);
-            $productsInCart = collect(Session::get('products_in_cart', []));
+            $productsInCart = Session::get('products_in_cart', []);
 
-            if (!$productsInCart->contains($id)) {
-                $productsInCart->push($id);
-                Session::put('products_in_cart', $productsInCart->all());
+            if (!in_array($id, $productsInCart)) {
+                $productsInCart[] = $id;
+                Session::put('products_in_cart', $productsInCart);
             }
             return redirect()->route('home')->with('success', __('Product added to cart'));
         } catch (\Exception $e) {
