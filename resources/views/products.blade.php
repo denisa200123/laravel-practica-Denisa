@@ -10,7 +10,6 @@
         <div style="margin-left: 10px; margin-bottom: 10px; width: fit-content; height: fit-content;">
             <h2>{{ __('All the products:') }}</h2>
 
-
             <div style="display: flex; justify-content:space-between;">
                 <form action="{{ route('products.index') }}" method="GET" style="width: fit-content; height: fit-content;">
                     <select name="orderBy" id="orderBy">
@@ -18,26 +17,24 @@
                             {{ __('None') }}
                         </option>
 
-                        <option value="title" {{ (Session::get('order_by') === 'title') ? 'selected' : ''}}>
+                        <option value="title" {{ (request('orderBy') === 'title') ? 'selected' : ''}}>
                             {{ __('Name') }}
                         </option>
 
-                        <option value="price" {{ (Session::get('order_by') === 'price') ? 'selected' : ''}}>
+                        <option value="price" {{ (request('orderBy') === 'price') ? 'selected' : ''}}>
                             {{ __('Price') }}
                         </option>
 
-                        <option value="description" {{ (Session::get('order_by') === 'description') ? 'selected' : ''}}>
+                        <option value="description" {{ (request('orderBy') === 'description') ? 'selected' : ''}}>
                             {{ __('Description') }}
                         </option>
                     </select>
 
-                    <input type="submit" value="{{ __('Order') }}" class="btn btn-info"></input>
+                    <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search product')}}" value="{{ request('searchedProduct') }}">
+
+                    <input type="submit" value="{{ __('Apply') }}" class="btn btn-info"></input>
                 </form>
 
-                <form action="{{ route('products.index') }}" method="GET" style="width: fit-content; height: fit-content;">
-                    <input type="text" name="searchedProduct" id="searchedProduct" placeholder="{{ __('Search product')}}">
-                    <input type="submit" value="{{ __('Search') }}" class="btn btn-info"></input>
-                </form>
             </div>
 
             <table border="1" cellpadding="10" style="margin-top: 10px;">

@@ -8,12 +8,21 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    private function saveImage($file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $file->move('images/', $filename);
+
+        return $filename;
+    }
+
     //display all products
     public function index(Request $request)
     {
         $request->validate([
-            'orderBy' => 'string|max:20|min:1|in:title,price,description,none',
-            'searchedProduct' => 'string|max:255|min:1'
+            'orderBy' => 'string|in:title,price,description,none',
+            'searchedProduct' => 'nullable|string|max:255'
         ]);
 
         $orderBy = $request->input('orderBy');
@@ -35,47 +44,6 @@ class ProductController extends Controller
         return view('products', ['products' => $products]);
     }
 
-    //store product
-    public function store(Request $request)
-    {
-        try {
-            $request->validate([
-                'title' => 'required|string|max:255',
-                'price' => 'required|numeric|min:0',
-                'image' => 'required|image',
-            ]);
-
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move('images/', $filename);
-
-            $info = [
-                'title' => $request->title,
-                'price' => $request->price,
-                'description' => $request->description,
-                'image_path' => $filename
-            ];
-
-            Product::create($info);
-            return redirect()->route('products.index')->with('success', __('Product created'));
-        } catch (\Exception $e) {
-            return back()->withErrors(__('Product couldnt be created'));
-        }
-    }
-    /*
-    //edit product page
-    public function edit($id)
-    {
-        try {
-            $product = Product::findOrFail($id);
-
-            return view('products-edit', ['product' => $product]);
-        } catch (\Exception $e) {
-            return back()->withErrors(__('Did not find product'));
-        }
-    }*/
-
     //show product
     public function show($id = null)
     {
@@ -89,6 +57,32 @@ class ProductController extends Controller
             return view('products-edit', ['product' => $product]);
         } catch (\Exception $e) {
             return back()->withErrors(__('Did not find product'));
+        }
+    }
+
+    //store product
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'image' => 'required|image',
+            ]);
+
+            $filename = $this->saveImage($request->file('image'));
+
+            $info = [
+                'title' => $request->title,
+                'price' => $request->price,
+                'description' => $request->description,
+                'image_path' => $filename
+            ];
+
+            Product::create($info);
+            return redirect()->route('products.index')->with('success', __('Product created'));
+        } catch (\Exception $e) {
+            return back()->withErrors(__('Product couldnt be created'));
         }
     }
 
@@ -109,10 +103,7 @@ class ProductController extends Controller
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
-                $file->move('images/', $filename);
+                $filename = $this->saveImage($request->file('image'));
                 $product->image_path = $filename;
             }
 

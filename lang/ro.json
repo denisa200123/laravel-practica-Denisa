@@ -58,10 +58,8 @@
     "Comments": "Comentarii",
     "Orders": "Comenzi",
     "Search product": "Cauta produs",
-    "Search": "Cauta",
     "Product": "Produs",
     "Products found": "Produse gasite",
-    "Order": "Ordoneaza",
     "None": "Nimic",
     "Did not find order": "N-am gasit comanda",
     "Order information": "Informatii comanda",
@@ -70,5 +68,6 @@
     "English": "Engleza",
     "Romanian": "Romana",
     "Spanish": "Spaniola",
-    "Mail could not be sent": "Mail-ul nu s-a putut trimite"
+    "Mail could not be sent": "Mail-ul nu s-a putut trimite",
+    "Apply": "Aplica"
 }

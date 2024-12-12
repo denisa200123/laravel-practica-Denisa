@@ -88,8 +88,10 @@ class CartController extends Controller
             $products = Product::whereIn('id', $productsInCart)->get();
             $totalPrice = $products->sum('price');
 
+            $productsIds = array_values($productsInCart);
+
             if (!empty(env('USER_EMAIL'))) {
-                Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($products, $request->all()));
+                Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($productsIds, $request->all()));
             }
 
             $order = Order::create([
