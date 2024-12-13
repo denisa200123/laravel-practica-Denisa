@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\SpaController;
 
 Route::middleware(['setLocale'])->group(function () {
 
@@ -41,4 +42,6 @@ Route::middleware(['setLocale'])->group(function () {
     });
 
     Route::post('/set-language', [LanguageController::class, 'setLanguage'])->name('set.language');
+
+    Route::get('/spa', [SpaController::class, 'index'])->name('spa.index');
 });

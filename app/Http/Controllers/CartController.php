@@ -24,7 +24,11 @@ class CartController extends Controller
         $this->initializeCart($request);
 
         $productsInCart = Session::get('products_in_cart', []);
-        $products = Product::whereNotIn('id', $productsInCart)->paginate(3);
+        $products = Product::whereNotIn('id', $productsInCart)->get();
+
+        if ($request->expectsJson()) {
+            return response()->json($products);
+        }
 
         return view('home',['products' => $products]);
     }
@@ -36,6 +40,10 @@ class CartController extends Controller
 
         $productsInCart = Session::get('products_in_cart', []);
         $products = Product::whereIn('id', $productsInCart)->get();
+
+        if ($request->expectsJson()) {
+            return response()->json($products);
+        }
 
         return view('cart', ['products' => $products]);
     }
@@ -51,8 +59,17 @@ class CartController extends Controller
                 $productsInCart[] = $id;
                 Session::put('products_in_cart', $productsInCart);
             }
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => __('Product added to cart')]);
+            }
+
             return redirect()->route('home')->with('success', __('Product added to cart'));
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => __('The selected product does not exist')], 404);
+            }
+
             return back()->withErrors(__('The selected product does not exist'));
         }
     }
@@ -70,8 +87,16 @@ class CartController extends Controller
                 Session::put('products_in_cart', $productsInCart);
             }
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => __('Product removed from cart')]);
+            }
+
             return redirect()->route('cart')->with('success', __('Product removed'));
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => __('The selected product does not exist')], 404);
+            }
+
             return back()->withErrors(__('The selected product does not exist'));
         }
     }
@@ -106,8 +131,16 @@ class CartController extends Controller
 
             Session::forget('products_in_cart');
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => __('Order placed successfully')]);
+            }
+
             return redirect()->route('home')->with('success', __('Order placed successfully'));
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => __('Mail could not be sent')]);
+            }
+
             return back()->withErrors(__('Mail could not be sent'));
         }
     }

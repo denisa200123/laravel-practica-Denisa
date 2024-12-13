@@ -41,6 +41,11 @@ class ProductController extends Controller
             'searchBy' => $searchBy,
             'orderBy' => $orderBy
         ]);
+
+        if ($request->expectsJson()) {
+            return response()->json($products);
+        }
+
         return view('products', ['products' => $products]);
     }
 
@@ -80,8 +85,17 @@ class ProductController extends Controller
             ];
 
             Product::create($info);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => __('Product created')]);
+            }
+
             return redirect()->route('products.index')->with('success', __('Product created'));
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => __('Product couldnt be created')]);
+            }
+
             return back()->withErrors(__('Product couldnt be created'));
         }
     }
@@ -108,21 +122,38 @@ class ProductController extends Controller
             }
 
             $product->update($request->all());
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => __('Product updated')]);
+            }
+
             return redirect()->route('products.index')->with('success', __('Product updated'));
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => __('Product couldnt be edited')]);
+            }
+
             return redirect()->route('products.index')->withErrors(__('Product couldnt be edited'));
         }
     }
 
     //delete product
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $product = Product::findOrFail($id);
             $product->delete();
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => __('Product removed')]);
+            }
+
             return redirect()->route('products.index')->with('success', __('Product removed'));
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => __('Product couldnt be removed')], 400);
+            }
+
             return back()->withErrors(__('Product couldnt be removed'));
         }
     }

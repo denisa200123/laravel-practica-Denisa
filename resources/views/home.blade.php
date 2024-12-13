@@ -28,10 +28,6 @@
             </table>
         </div>
 
-        <div style="margin: 20px 0 0 20px">
-            {{ $products->links('pagination::bootstrap-4') }}
-        </div>
-
     @else
         <h2 style="margin-left: 10px;">{{ __('You bought everything.') }}</h2>
     @endif
