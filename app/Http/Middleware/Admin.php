@@ -16,7 +16,10 @@ class Admin
     public function handle(Request $request, Closure $next)
     {
         //admin can't access login & only admin can access admin restricted pages
-        if (Session::get('is_admin') && $request->route()->named('login.form') || !Session::get('is_admin') && !$request->route()->named('login.form')) {
+        if (
+            Session::get('is_admin') && $request->route()->named('login.form')
+            || !Session::get('is_admin') && !$request->route()->named('login.form')
+        ) {
             abort(403, __('Unauthorized'));
         }
 

@@ -21,24 +21,24 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'orderBy' => 'string|in:title,price,description,none',
-            'searchedProduct' => 'nullable|string|max:255'
+            'orderBy' => 'nullable|string|in:title,price,description',
+            'searchBy' => 'nullable|string|max:255'
         ]);
 
         $orderBy = $request->input('orderBy');
-        $searchedProduct = $request->input('searchedProduct');
+        $searchBy = $request->input('searchBy');
         $query = Product::query();
 
-        if (!empty($searchedProduct)) {
-            $query->where('title', 'like', "%{$searchedProduct}%");
+        if (!empty($searchBy)) {
+            $query->where('title', 'like', "%{$searchBy}%");
         }
 
-        if ($orderBy !== 'none' && !empty($orderBy)) {
+        if (!empty($orderBy)) {
             $query->orderBy($orderBy, 'asc');
         }
 
         $products = $query->paginate(2)->appends([
-            'searchedProduct' => $searchedProduct,
+            'searchBy' => $searchBy,
             'orderBy' => $orderBy
         ]);
         return view('products', ['products' => $products]);

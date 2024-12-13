@@ -41,7 +41,7 @@ class CartController extends Controller
     }
 
     //add product to cart
-    public function addCart(Request $request, $id)
+    public function addToCart(Request $request, $id)
     {
         try {
             $this->initializeCart($request);
@@ -58,7 +58,7 @@ class CartController extends Controller
     }
 
     //remove from cart
-    public function removeCart(Request $request, $id)
+    public function removeFromCart(Request $request, $id)
     {
         try {
             $this->initializeCart($request);
@@ -66,6 +66,7 @@ class CartController extends Controller
 
             if (($key = array_search($id, $productsInCart)) !== false) {
                 unset($productsInCart[$key]);
+                $productsInCart = array_values($productsInCart);
                 Session::put('products_in_cart', $productsInCart);
             }
 
@@ -88,10 +89,8 @@ class CartController extends Controller
             $products = Product::whereIn('id', $productsInCart)->get();
             $totalPrice = $products->sum('price');
 
-            $productsIds = array_values($productsInCart);
-
             if (!empty(env('USER_EMAIL'))) {
-                Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($productsIds, $request->all()));
+                Mail::to(env('USER_EMAIL'))->send(new OrderConfirmation($productsInCart, $request->all()));
             }
 
             $order = Order::create([
