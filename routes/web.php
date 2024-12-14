@@ -44,4 +44,15 @@ Route::middleware(['setLocale'])->group(function () {
     Route::post('/set-language', [LanguageController::class, 'setLanguage'])->name('set.language');
 
     Route::get('/spa', [SpaController::class, 'index'])->name('spa.index');
+    Route::get('/header', [SpaController::class, 'header'])->name('header');
+    Route::get('/translations', function () {
+        $locale = session('locale');
+        if ($locale === 'ro') {
+            $translations = File::json(base_path('lang/ro.json'));
+        } else {
+            $translations = File::json(base_path('lang/en.json'));
+        }
+
+        return response()->json($translations);
+    });
 });

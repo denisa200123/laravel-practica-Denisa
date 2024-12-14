@@ -50,14 +50,22 @@ class ProductController extends Controller
     }
 
     //show product
-    public function show($id = null)
+    public function show(Request $request, $id = null)
     {
         try {
             if (is_null($id)) {
+                if ($request->expectsJson()) {
+                    return response()->json();
+                }
+
                 return view('products-create');
             }
 
             $product = Product::findOrFail($id);
+
+            if ($request->expectsJson()) {
+                return response()->json($product);
+            }
 
             return view('products-edit', ['product' => $product]);
         } catch (\Exception $e) {

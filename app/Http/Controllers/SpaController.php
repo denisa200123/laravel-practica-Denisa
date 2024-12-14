@@ -12,4 +12,9 @@ class SpaController extends Controller
     {
         return view('spa');
     }
+
+    public function header()
+    {
+        return view('components/header-spa')->render();
+    }
 }

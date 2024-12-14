@@ -1,9 +1,9 @@
 window.displayProductDetails = function() {
     let html = [
-        '<th class="translatable" data-key="Name">Name</th>',
-        '<th class="translatable" data-key="Description">Description</th>',
-        '<th class="translatable" data-key="Price">Price</th>',
-        '<th class="translatable" data-key="Image">Image</th>',
+        '<th class="translatable" data-key="Name"></th>',
+        '<th class="translatable" data-key="Description"></th>',
+        '<th class="translatable" data-key="Price"></th>',
+        '<th class="translatable" data-key="Image"></th>',
     ]
     return html;
 }
@@ -28,4 +28,31 @@ window.showError = function(message) {
     $('.error').html(message);
     $('.error').css('display', 'block');
     $('.error').fadeOut(2000);
+}
+
+window.updateHeader = function(){
+    $.ajax({
+        url: '/header',
+        success: function (html) {
+            $('header').html(html);
+        }
+    });
+}
+
+let translations = {};
+
+window.loadTranslations = function(callback) {
+    $.ajax({
+        url: '/translations',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            translations = response;
+            if (callback) callback();
+        },
+    });
+}
+
+window.__ = function(key) {
+    return translations[key] || key;
 }

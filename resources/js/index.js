@@ -2,7 +2,7 @@ window.renderIndex = function(products) {
     let html = [
         '<tr>',
             displayProductDetails(),
-            '<th class="translatable" data-key="Add">Add</th>',
+            '<th class="translatable" data-key="Add"></th>',
         '</tr>'
     ].join('');
 
@@ -10,7 +10,7 @@ window.renderIndex = function(products) {
         html += [
             '<tr>',
                 displayProduct(product),
-                `<td><a href="#add/${product.id}" class="translatable" data-key="Add to cart">Add</a></td>`,
+                `<td><a href="#add/${product.id}" class="translatable" data-key="Add to cart"></a></td>`,
             '</tr>'
         ].join('');
     });

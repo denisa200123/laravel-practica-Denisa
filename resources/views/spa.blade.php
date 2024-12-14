@@ -13,6 +13,9 @@
         @vite('resources/js/index.js')
         @vite('resources/js/cart.js')
         @vite('resources/js/login.js')
+        @vite('resources/js/products.js')
+        @vite('resources/js/product.js')
+        @vite('resources/js/orders.js')
 
         <style>
             img {
@@ -35,42 +38,7 @@
     </head>
 
     <body>
-        <header>
-            <br>
-            <div style="display: flex; justify-content:space-between; align-items:center;">
-                <div style="width: fit-content; height: fit-content; margin-left: 10px;">
-                    <a href="#" class="btn btn-dark">{{ __('Home') }}</a>
-                    <a href="#cart" class="btn btn-dark">{{ __('Your cart') }}</a>
-                </div>
-
-                @if (session("is_admin"))
-                    <div style="width: fit-content; height: fit-content;">
-                        <div style="width: fit-content; height: fit-content;">
-                            <a href="#products" class="btn btn-dark">{{ __('Products') }}</a>
-                            <a href="#create" class="btn btn-dark" style="margin-left: 10px;">{{ __('Create product') }}</a>
-                            <a href="#orders" class="btn btn-dark" style="margin-left: 10px;">{{ __('See orders') }}</a>
-                        </div>
-                    </div>
-
-                    <div style="width: fit-content; height: fit-content; margin-right: 10px;">
-                        <a href="#logout" class="btn btn-dark">{{ __('Logout') }}</a>
-                    </div>
-                @else
-                    <div style="width: fit-content; height: fit-content; margin-right: 10px;">
-                        <a href="#login" class="btn btn-dark">{{ __('Admin login') }}</a>
-                    </div>
-                @endif
-            </div>
-
-            <form id="languageForm" style="width: fit-content; height: fit-content; margin-top:10px; margin-left: 10px;">
-                <select name="lang" id="lang">
-                    <option value="en" @if (session('locale', 'en') == 'en') selected @endif>{{ __('English') }}</option>
-                    <option value="ro" @if (session('locale') == 'ro') selected @endif>{{ __('Romanian') }}</option>
-                </select>
-            </form>
-
-            <br><hr>
-        </header>
+        <x-header-spa />
 
         <p class="success alert alert-success" style="display: none;"></p>
         <p class="error alert alert-danger" style="display: none;"></p>
@@ -92,12 +60,10 @@
             <h2>{{ __('Login info') }}</h2>
             <form class="loginForm"></form>
         </div>
-<!--
+
         <div class="page products" style="margin: 10px;">
             <h2>{{ __('All the products:') }}</h2>
-            <form class="searchProductForm" style="width: fit-content; height: fit-content; display: flex"></form>
-            <br>
-            <form class="orderForm" style="width: fit-content; height: fit-content;"></form>
+            <form class="orderProductsForm" style="width: fit-content; height: fit-content; display: flex"></form>
             <br>
             <table class="list" border="1" cellpadding="10"></table>
             <div class="pagination"></div>
@@ -122,11 +88,5 @@
             <h2></h2>
             <table class="list" border="1" cellpadding="10"></table>
         </div>
-
-        <div class="page products-found" style="margin: 10px;">
-            <h2>{{ __('Products found') }}</h2>
-            <table class="list" border="1" cellpadding="10"></table>
-        </div>
-        -->
     </body>
 </html>

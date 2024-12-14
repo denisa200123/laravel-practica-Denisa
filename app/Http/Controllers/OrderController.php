@@ -10,7 +10,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         try {
-            $orders = Order::paginate(5);
+            $orders = Order::all();
 
             if ($request->expectsJson()) {
                 return response()->json($orders);
@@ -32,7 +32,7 @@ class OrderController extends Controller
             $order = Order::findOrFail($id);
 
             if ($request->expectsJson()) {
-                return response()->json($order);
+                return response()->json($order->products);
             }
 
             return view('orders-show', ['order' => $order]);
