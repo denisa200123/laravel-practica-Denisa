@@ -5,17 +5,14 @@ $(document).ready(function () {
         }
     });
 
-    loadTranslations(function() {
-        $('.translatable').each(function() {
-            let key = $(this).data('key');
-            $(this).text(__(key));
-        });
-    });
+    loadTranslations();
+
+    // Move handling/control functions in their respective files, after the view
 
     //change language form
     $(document).on('change', '#languageForm', function (e) {
         e.preventDefault();
-
+        
         let languageData = $(this).serialize();
         $.ajax({
             url: '/set-language',
@@ -23,9 +20,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: languageData,
             success: function () {
-                loadTranslations(function () {
-                    location.reload();
-                });
+                location.reload();
             },
         });
     });
@@ -82,6 +77,7 @@ $(document).ready(function () {
     });
 
     //order and search products form
+    // TODO: Rename to something like productSearchSortForm
     $('.orderProductsForm').on('submit', function (e) {
         e.preventDefault();
         let orderData = $(this).serialize();
@@ -99,6 +95,8 @@ $(document).ready(function () {
             }
         });
     });
+
+    // TODO: Merge edit and create
 
     //edit form
     $('.editProductForm').on('submit', function (e) {
@@ -181,7 +179,6 @@ $(document).ready(function () {
 
     window.onhashchange = function () {
         $('.page').hide();
-        updateHeader();
 
         switch (window.location.hash) {
             //cart page
@@ -193,10 +190,7 @@ $(document).ready(function () {
                     success: function (response) {
                         document.title = __('Your cart');
                         $('.cart .list').html(renderCart(response));
-                        $('.cart .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     }
                 });
                 break;
@@ -204,10 +198,10 @@ $(document).ready(function () {
             //add product to cart
             case (window.location.hash.match(/#add\/\d+/) || {}).input:
                 $('.index').show();
-                let addedProduct = window.location.hash.split('#add/')[1];
+                let productToAdd = window.location.hash.split('#add/')[1];
                 $.ajax({
                     type: 'post',
-                    url: `/cart/${addedProduct}/add`,
+                    url: `/cart/${productToAdd}/add`,
                     dataType: 'json',
                     success: function (response) {
                         window.location.hash = '#';
@@ -223,10 +217,10 @@ $(document).ready(function () {
             //remove product from cart
             case (window.location.hash.match(/#remove\/\d+/) || {}).input:
                 $('.cart').show();
-                let removedProduct = window.location.hash.split('#remove/')[1];
+                let productToRemove = window.location.hash.split('#remove/')[1];
                 $.ajax({
                     type: 'post',
-                    url: `/cart/${removedProduct}/remove`,
+                    url: `/cart/${productToRemove}/remove`,
                     dataType: 'json',
                     success: function (response) {
                         window.location.hash = '#cart';
@@ -248,10 +242,7 @@ $(document).ready(function () {
                         document.title = __('Login');
                         $('.login').show();
                         $('.login .loginForm').html(renderLoginForm());
-                        $('.login .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     }
                 });
                 break;
@@ -280,10 +271,7 @@ $(document).ready(function () {
                         $('.products .list').html(renderProducts(response.data));
                         $('.products .orderProductsForm').html(renderOrderProductsForm());
                         $('.products .pagination').html(renderPagination(response));
-                        $('.products .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     },
                 });
                 break;
@@ -316,10 +304,7 @@ $(document).ready(function () {
                         document.title = __('Create product');
                         $('.create').show();
                         $('.create .createProductForm').html(renderCreateProductForm());
-                        $('.create .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     },
                 });
                 break;
@@ -334,10 +319,7 @@ $(document).ready(function () {
                         document.title = __('Edit product');
                         $('.edit').show();
                         $('.edit .editProductForm').html(renderEditProductForm(response));
-                        $('.edit .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     },
                     error: function (response) {
                         window.location.hash = '#products';
@@ -355,10 +337,7 @@ $(document).ready(function () {
                         document.title = __('Orders');
                         $('.orders').show();
                         $('.orders .list').html(renderOrders(response));
-                        $('.orders .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     },
                     error: function (response) {
                         showError(response.responseJSON.error);
@@ -377,10 +356,7 @@ $(document).ready(function () {
                         $('.order').show();
                         $('.order h2').html(`Id: ${order}`);
                         $('.order .list').html(renderOrder(response));
-                        $('.order .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     },
                     error: function (response) {
                         window.location.hash = '#orders';
@@ -398,10 +374,7 @@ $(document).ready(function () {
                     success: function (response) {
                         document.title = __('Shop');
                         $('.index .list').html(renderIndex(response));
-                        $('.index .translatable').each(function() {
-                            let key = $(this).data('key');
-                            $(this).text(__(key));
-                        });
+                        applyTranslations();
                     }
                 });
                 break;

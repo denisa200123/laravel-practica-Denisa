@@ -20,6 +20,7 @@ window.renderProducts = function(products) {
     return html;
 }
 
+// Keep search, sort and pagination in the URL
 window.renderOrderProductsForm = function(value) {
     let html = [
         '<select name="orderBy" id="orderBy">',

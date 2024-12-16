@@ -32,7 +32,7 @@ window.showError = function(message) {
 
 window.updateHeader = function(){
     $.ajax({
-        url: '/header',
+        url: '/spa/header',
         success: function (html) {
             $('header').html(html);
         }
@@ -41,15 +41,23 @@ window.updateHeader = function(){
 
 let translations = {};
 
+// TODO: Try this with Promise and async/await
 window.loadTranslations = function(callback) {
     $.ajax({
-        url: '/translations',
+        url: '/spa/translations',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
             translations = response;
             if (callback) callback();
         },
+    });
+}
+
+window.applyTranslations = function() {
+    $('.translatable').each(function() {
+        let key = $(this).data('key');
+        $(this).text(__(key)).removeClass('translatable');
     });
 }
 
