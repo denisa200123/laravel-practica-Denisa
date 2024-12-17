@@ -5,9 +5,14 @@ $(document).ready(function () {
         }
     });
 
-    loadTranslations();
+    loadTranslations(function() {
+        console.log('After loadingTranslations without async');
+    });
 
-    // Move handling/control functions in their respective files, after the view
+    (async function() {
+        await loadTranslationsAsync();
+        console.log('After loadingTranslations with async');
+    })();    
 
     //change language form
     $(document).on('change', '#languageForm', function (e) {
@@ -22,158 +27,6 @@ $(document).ready(function () {
             success: function () {
                 location.reload();
             },
-        });
-    });
-
-    //checkout form
-    $('.checkoutForm').on('submit', function (e) {
-        e.preventDefault();
-
-        let checkoutData = $(this).serialize();
-
-        $.ajax({
-            type: 'post',
-            url: '/checkout',
-            dataType: 'json',
-            data: checkoutData,
-            success: function (response) {
-                window.location.hash = '#';
-                success(response.success);
-            },
-        });
-    });
-
-    //login form
-    $('.loginForm').on('submit', function (e) {
-        e.preventDefault();
-
-        let loginData = $(this).serialize();
-
-        $.ajax({
-            type: 'post',
-            url: '/login',
-            dataType: 'json',
-            data: loginData,
-            success: function (response) {
-                updateHeader();
-                window.location.hash = '#';
-                success(response.success);
-            },
-            error: function (response) {
-                $('.laravelError').remove();
-
-                if (response.responseJSON.errors) {
-                    $.each(response.responseJSON.errors, function (field, errors) {
-                        let errorHtml = `<div class="laravelError alert-danger">${errors[0]}</div>`;
-                        $(`#${field}`).after(errorHtml);
-                    });
-                }
-
-                if (response.responseJSON.error) {
-                    showError(response.responseJSON.error);
-                }
-            }
-        });
-    });
-
-    //order and search products form
-    // TODO: Rename to something like productSearchSortForm
-    $('.orderProductsForm').on('submit', function (e) {
-        e.preventDefault();
-        let orderData = $(this).serialize();
-
-        $.ajax({
-            url: '/products',
-            dataType: 'json',
-            data: orderData,
-            success: function (response) {
-                $('.products .list').html(renderProducts(response.data));
-                $('.products .pagination').html(renderPagination(response));
-            },
-            error: function (response) {
-                showError(response.responseJSON.error);
-            }
-        });
-    });
-
-    // TODO: Merge edit and create
-
-    //edit form
-    $('.editProductForm').on('submit', function (e) {
-        e.preventDefault();
-
-        let editForm = new FormData();
-        editForm.append('_method', 'PATCH');
-
-        editForm.append('title', $('#title').val());
-        editForm.append('description', $('#description').val());
-        editForm.append('price', $('#price').val());
-
-        if ($('#image')[0].files[0]) {
-            editForm.append('image', $('#image')[0].files[0]);
-        }
-
-        let productToEdit = window.location.hash.split('#show/')[1];
-        $.ajax({
-            type: 'POST',
-            url: `/products/${productToEdit}`,
-            dataType: 'json',
-            data: editForm,
-            enctype: 'multipart/form-data',
-            contentType: false,
-            processData: false,
-            cache: false,
-            success: function (response) {
-                window.location.hash = '#products';
-                success(response.success);
-            },
-            error: function (response) {
-                $('.laravelError').remove();
-
-                if (response.responseJSON.errors) {
-                    $.each(response.responseJSON.errors, function (field, errors) {
-                        let errorHtml = `<div class="laravelError alert-danger">${errors[0]}</div>`;
-                        $(`#${field}`).after(errorHtml);
-                    });
-                }
-            }
-        });
-    });
-
-    //create form
-    $('.createProductForm').on('submit', function (e) {
-        e.preventDefault();
-
-        let createForm = new FormData();
-
-        createForm.append('title', $('#title').val());
-        createForm.append('description', $('#description').val());
-        createForm.append('price', $('#price').val());
-        createForm.append('image', $('#image')[0].files[0]);
-
-        $.ajax({
-            type: 'POST',
-            url: '/products',
-            dataType: 'json',
-            data: createForm,
-            enctype: 'multipart/form-data',
-            contentType: false,
-            processData: false,
-            cache: false,
-            success: function (response) {
-                window.location.hash = '#products';
-                success(response.success);
-            },
-            error: function (response) {
-                $('.laravelError').remove();
-
-                if (response.responseJSON.errors) {
-                    $.each(response.responseJSON.errors, function (field, errors) {
-                        let errorHtml = `<div class="laravelError alert-danger">${errors[0]}</div>`;
-                        $(`#${field}`).after(errorHtml);
-                    });
-                }
-            }
         });
     });
 
@@ -266,10 +119,14 @@ $(document).ready(function () {
                     url: '/products?page=1',
                     dataType: 'json',
                     success: function (response) {
+                        let urlParams = new URLSearchParams(window.location.search);
+                        let orderBy = urlParams.get('orderBy');
+                        let searchBy = urlParams.get('searchBy');
+
                         document.title = __('Products');
                         $('.products').show();
                         $('.products .list').html(renderProducts(response.data));
-                        $('.products .orderProductsForm').html(renderOrderProductsForm());
+                        $('.products .productSearchSortForm').html(renderProductSearchSortForm(orderBy, searchBy));
                         $('.products .pagination').html(renderPagination(response));
                         applyTranslations();
                     },

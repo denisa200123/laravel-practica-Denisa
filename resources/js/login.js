@@ -1,4 +1,4 @@
-window.renderLoginForm = function() {
+window.renderLoginForm = function () {
     let htmlLoginForm = `
         <label for="username" class="translatable" data-key="Username:"></label>
         <input type="text" id="username" name="username" required">
@@ -12,3 +12,36 @@ window.renderLoginForm = function() {
     `;
     return htmlLoginForm;
 }
+
+//login form
+$('.loginForm').on('submit', function (e) {
+    e.preventDefault();
+
+    let loginData = $(this).serialize();
+
+    $.ajax({
+        type: 'post',
+        url: '/login',
+        dataType: 'json',
+        data: loginData,
+        success: function (response) {
+            updateHeader();
+            window.location.hash = '#';
+            success(response.success);
+        },
+        error: function (response) {
+            $('.laravelError').remove();
+
+            if (response.responseJSON.errors) {
+                $.each(response.responseJSON.errors, function (field, errors) {
+                    let errorHtml = `<div class="laravelError alert-danger">${errors[0]}</div>`;
+                    $(`#${field}`).after(errorHtml);
+                });
+            }
+
+            if (response.responseJSON.error) {
+                showError(response.responseJSON.error);
+            }
+        }
+    });
+});

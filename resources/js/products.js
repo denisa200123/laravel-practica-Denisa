@@ -1,4 +1,4 @@
-window.renderProducts = function(products) {
+window.renderProducts = function (products) {
     let html = [
         '<tr>',
             displayProductDetails(),
@@ -20,25 +20,24 @@ window.renderProducts = function(products) {
     return html;
 }
 
-// Keep search, sort and pagination in the URL
-window.renderOrderProductsForm = function(value) {
+window.renderProductSearchSortForm = function (orderBy, searchBy) {
     let html = [
         '<select name="orderBy" id="orderBy">',
             '<option value="" class="translatable" data-key="None"></option>',
-            `<option value="title" ${value === 'title' ? "selected" : ""} class="translatable" data-key="Name"></option>`,
-            `<option value="price" ${value === 'price' ? "selected" : ""} class="translatable" data-key="Price"></option>`,
-            `<option value="description" ${value === 'description' ? "selected" : ""} class="translatable" data-key="Description"></option>`,
-        
-            '</select>',
-        '<input type="text" name="searchBy" id="searchBy" placeholder="Search">',
+            `<option value="title" ${orderBy === 'title' ? "selected" : ""} class="translatable" data-key="Name"></option>`,
+            `<option value="price" ${orderBy === 'price' ? "selected" : ""} class="translatable" data-key="Price"></option>`,
+            `<option value="description" ${orderBy === 'description' ? "selected" : ""} class="translatable" data-key="Description"></option>`,
+        '</select>',
 
-        '<button type="submit" class="btn btn-primary translatable" data-key="Apply"</button>'
+        `<input type="text" name="searchBy" id="searchBy" placeholder="Search" value="${searchBy || ''}">`,
+        '<button type="submit" class="btn btn-primary translatable" data-key="Apply"></button>',
+        '</form>'
     ].join('');
-
     return html;
-}
+};
 
-window.renderPagination = function(response) {
+
+window.renderPagination = function (response) {
     let paginationHtml = '';
 
     if (response.prev_page_url) {
@@ -51,17 +50,38 @@ window.renderPagination = function(response) {
     return paginationHtml;
 }
 
-window.loadProducts = function(url) {
+//order and search products form
+$('.productSearchSortForm').on('submit', function (e) {
+    e.preventDefault();
+    let orderData = $(this).serialize();
+
+    let newUrl = '/products?' + orderData;
+    window.history.pushState({}, '', newUrl);
+
+    $.ajax({
+        url: newUrl,
+        dataType: 'json',
+        success: function (response) {
+            $('.products .list').html(renderProducts(response.data));
+            $('.products .pagination').html(renderPagination(response));
+            applyTranslations();
+        },
+        error: function (response) {
+            showError(response.responseJSON.error);
+        }
+    });
+});
+
+window.loadProducts = function (url) {
+    window.history.pushState({}, '', url);
+
     $.ajax({
         url: url,
         dataType: 'json',
         success: function (response) {
             $('.products .list').html(renderProducts(response.data));
             $('.products .pagination').html(renderPagination(response));
-            $('.products .translatable').each(function() {
-                let key = $(this).data('key');
-                $(this).text(__(key));
-            });
+            applyTranslations();
         }
     });
 }

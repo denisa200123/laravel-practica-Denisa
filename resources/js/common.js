@@ -41,18 +41,32 @@ window.updateHeader = function(){
 
 let translations = {};
 
-// TODO: Try this with Promise and async/await
 window.loadTranslations = function(callback) {
     $.ajax({
         url: '/spa/translations',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
+            console.log('LoadTranslations success');
             translations = response;
             if (callback) callback();
         },
     });
 }
+
+window.loadTranslationsAsync = async function () {
+    try {
+        const response = await $.ajax({
+            url: '/spa/translations',
+            type: 'GET',
+            dataType: 'json'
+        });
+        console.log('LoadTranslationsAsync success');
+        translations = response;
+    } catch (error) {
+        console.error('Failed to load translations');
+    }
+};
 
 window.applyTranslations = function() {
     $('.translatable').each(function() {

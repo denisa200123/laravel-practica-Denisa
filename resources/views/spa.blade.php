@@ -63,7 +63,7 @@
 
         <div class="page products" style="margin: 10px;">
             <h2>{{ __('All the products:') }}</h2>
-            <form class="orderProductsForm" style="width: fit-content; height: fit-content; display: flex"></form>
+            <form class="productSearchSortForm" style="width: fit-content; height: fit-content; display: flex"></form>
             <br>
             <table class="list" border="1" cellpadding="10"></table>
             <div class="pagination"></div>

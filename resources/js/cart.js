@@ -1,16 +1,16 @@
-window.renderCart = function(products) {
+window.renderCart = function (products) {
     let html = [
         '<tr>',
-            displayProductDetails(),
-            '<th class="translatable" data-key="Remove"></th>',
+        displayProductDetails(),
+        '<th class="translatable" data-key="Remove"></th>',
         '</tr>'
     ].join('');
 
     $.each(products, function (key, product) {
         html += [
             '<tr>',
-                displayProduct(product),
-                `<td><a href="#remove/${product.id}" class="translatable" data-key="Remove product"></a></td>`,
+            displayProduct(product),
+            `<td><a href="#remove/${product.id}" class="translatable" data-key="Remove product"></a></td>`,
             '</tr>'
         ].join('');
     });
@@ -30,9 +30,27 @@ window.renderCart = function(products) {
         <button type="submit" class="btn btn-primary translatable" data-key="Checkout"</button>
     `;
 
-    if(products.length > 0) {
+    if (products.length > 0) {
         $('.cart .checkoutForm').html(htmlCheckoutForm);
     }
 
     return html;
 }
+
+//checkout form
+$('.checkoutForm').on('submit', function (e) {
+    e.preventDefault();
+
+    let checkoutData = $(this).serialize();
+
+    $.ajax({
+        type: 'post',
+        url: '/checkout',
+        dataType: 'json',
+        data: checkoutData,
+        success: function (response) {
+            window.location.hash = '#';
+            success(response.success);
+        },
+    });
+});
