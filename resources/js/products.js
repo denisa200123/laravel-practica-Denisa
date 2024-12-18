@@ -51,6 +51,8 @@ window.renderPagination = function (response) {
 }
 
 //order and search products form
+// Keep search, sort and pagination in the URL
+// TODO: Rename to something like productSearchSortForm
 $('.productSearchSortForm').on('submit', function (e) {
     e.preventDefault();
     let orderData = $(this).serialize();

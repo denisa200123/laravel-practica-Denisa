@@ -41,6 +41,7 @@ window.updateHeader = function(){
 
 let translations = {};
 
+// TODO: Try this with Promise and async/await
 window.loadTranslations = function(callback) {
     $.ajax({
         url: '/spa/translations',
